@@ -5,8 +5,8 @@
 
 /* ----- Functions ----- */
 
-PCB* dequeue( PCB* pcbQueue );
-void enqueue ( PCB* pcbQueue, PCB* pcbNode );
+//PCB* dequeue( PCB* pcbQueue );
+//void enqueue ( PCB* pcbQueue, PCB* pcbNode );
 
 PCB* dequeuePriority( void*  voidQueue );
 void enqueuePriority ( PCB**  pcbQueue, PCB* pcbNode );

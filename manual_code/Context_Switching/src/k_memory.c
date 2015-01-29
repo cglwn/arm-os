@@ -6,6 +6,8 @@
  */
 
 #include "k_memory.h"
+#include "k_process.h"
+#include "k_utilities.h"
 
 #ifdef DEBUG_0
 #include "printf.h"
@@ -119,7 +121,9 @@ void *k_request_memory_block(void) {
 #endif /* ! DEBUG_0 */
 	enableInterrupts(false);
 	while(!mbHead) {
-		//TODO: release processor
+		gp_current_process->m_state = BLOCKED;
+		enqueuePriority(PCBBlockedQueue, gp_current_process);
+		k_release_processor();
 	}
 	tempBlock = mbHead;
 	mbHead = mbHead->mbNext;
@@ -142,7 +146,7 @@ int k_release_memory_block(void *p_mem_blk) {
 	initializeMemBlock(tempBlock, p_mem_blk);
 	mbHead = tempBlock;
 	mbHead->mbNext = tempNext;
-	//TODO: pop blocked_resource_q
+	handle_process_ready(dequeuePriority(PCBBlockedQueue));
 	enableInterrupts(true);
 	return RTX_OK;
 }

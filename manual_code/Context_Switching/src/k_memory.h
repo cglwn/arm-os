@@ -16,6 +16,9 @@
 /* ----- Types ----- */
 
 /* ----- Variables ----- */
+extern PCB **gp_pcbs;
+extern PCB *gp_current_process;
+
 typedef struct mem_block {
 	struct mem_block *mbNext;
 	U32 *uMemory;
@@ -32,9 +35,9 @@ U32 *alloc_stack(U32 size_b);
 void *k_request_memory_block(void);
 int k_release_memory_block(void *);
 
+
 /* ----- Helper Functions ------ */
 void enableInterrupts( BOOLEAN nEnable ); 
 void initializeMemBlock(MEM_BLOCK *mbBlock, U32* uMemory);
-
 
 #endif /* ! K_MEM_H_ */

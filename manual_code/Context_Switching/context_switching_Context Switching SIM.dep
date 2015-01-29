@@ -18,7 +18,7 @@ I (src\uart_polling.h)(0x54AEABBE)
 F (.\src\printf.c)(0x54AEABBE)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "printf.o" --omf_browse "printf.crf" --depend "printf.d")
 I (src\printf.h)(0x54AEABBE)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdarg.h)(0x4EB16D2C)
-F (.\src\main_svc.c)(0x54CA8CDE)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "main_svc.o" --omf_browse "main_svc.crf" --depend "main_svc.d")
+F (.\src\main_svc.c)(0x54CA8EA6)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "main_svc.o" --omf_browse "main_svc.crf" --depend "main_svc.d")
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\LPC17xx.h)(0x4FF59B7C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cm3.h)(0x5006C432)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB16D34)
@@ -35,14 +35,16 @@ I (src\k_rtx_init.h)(0x54AEABBE)
 I (src\k_rtx.h)(0x54CA8D3A)
 I (src\uart_polling.h)(0x54AEABBE)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB16D34)
-I (src\k_memory.h)(0x54CA83F1)
-I (src\k_process.h)(0x54AEABBE)
-F (.\src\k_memory.c)(0x54CA8767)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "k_memory.o" --omf_browse "k_memory.crf" --depend "k_memory.d")
-I (src\k_memory.h)(0x54CA83F1)
+I (src\k_memory.h)(0x54CA93AB)
+I (src\k_process.h)(0x54CA98EA)
+F (.\src\k_memory.c)(0x54CA985B)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "k_memory.o" --omf_browse "k_memory.crf" --depend "k_memory.d")
+I (src\k_memory.h)(0x54CA93AB)
 I (src\k_rtx.h)(0x54CA8D3A)
+I (src\k_process.h)(0x54CA98EA)
+I (src\k_utilities.h)(0x54CA9888)
 I (src\printf.h)(0x54AEABBE)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdarg.h)(0x4EB16D2C)
-F (.\src\k_process.c)(0x54CA8D21)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "k_process.o" --omf_browse "k_process.crf" --depend "k_process.d")
+F (.\src\k_process.c)(0x54CA9CAC)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "k_process.o" --omf_browse "k_process.crf" --depend "k_process.d")
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\LPC17xx.h)(0x4FF59B7C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cm3.h)(0x5006C432)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdint.h)(0x4EB16D34)
@@ -50,13 +52,13 @@ I (C:\Software\Keil\ARM\CMSIS\Include\core_cmInstr.h)(0x5059F73C)
 I (C:\Software\Keil\ARM\CMSIS\Include\core_cmFunc.h)(0x4FDB2F0C)
 I (C:\Software\Keil\ARM\Inc\NXP\LPC17xx\system_LPC17xx.h)(0x4F58E032)
 I (src\uart_polling.h)(0x54AEABBE)
-I (src\k_process.h)(0x54AEABBE)
+I (src\k_process.h)(0x54CA98EA)
 I (src\k_rtx.h)(0x54CA8D3A)
-I (src\k_utilities.h)(0x54CA8BC5)
+I (src\k_utilities.h)(0x54CA9888)
 I (src\printf.h)(0x54AEABBE)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\stdarg.h)(0x4EB16D2C)
 F (.\src\k_utilities.c)(0x54CA8C47)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "k_utilities.o" --omf_browse "k_utilities.crf" --depend "k_utilities.d")
-I (src\k_utilities.h)(0x54CA8BC5)
+I (src\k_utilities.h)(0x54CA9888)
 I (src\k_rtx.h)(0x54CA8D3A)
 I (C:\Software\Keil\ARM\ARMCC\bin\..\include\assert.h)(0x4EB16D30)
 F (.\src\usr_proc.c)(0x54AEABBE)(-c --cpu Cortex-M3 -g -O0 --apcs=interwork -I C:\Software\Keil\ARM\RV31\INC -I C:\Software\Keil\ARM\CMSIS\Include -I C:\Software\Keil\ARM\Inc\NXP\LPC17xx -DDEBUG_0 -o "usr_proc.o" --omf_browse "usr_proc.crf" --depend "usr_proc.d")

@@ -149,3 +149,34 @@ int k_release_processor(void)
 	
 	return retCode;
 }
+
+void handle_process_ready(PCB* process) {
+	PCB *p_pcb_old = gp_current_process;
+	gp_current_process = process;
+	process_switch(p_pcb_old);
+}
+int set_process_priority(int process_id, int priority){
+	//gp_pcbs
+	int i;
+	if (process_id == 0 || priority == 4){
+		return RTX_ERR;
+	}
+	
+	for(i = 0; i < NUM_TEST_PROCS; i++) {
+		if(gp_pcbs[i]->m_pid == process_id) {
+			gp_pcbs[i]->m_priority = priority;
+			return RTX_OK;
+		}
+	}
+	return RTX_ERR;
+}
+
+int get_process_priority(int process_id){
+		int i;
+	for(i = 0; i < NUM_TEST_PROCS; i++) {
+		if(gp_pcbs[i]->m_pid == process_id) {
+			return gp_pcbs[i]->m_priority;
+		}
+	}
+	return RTX_ERR;
+}
