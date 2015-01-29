@@ -18,6 +18,8 @@
 #include "uart_polling.h"
 #include "k_process.h"
 
+#include "k_utilities.h"
+
 #ifdef DEBUG_0
 #include "printf.h"
 #endif /* DEBUG_0 */
@@ -25,6 +27,9 @@
 /* ----- Global Variables ----- */
 PCB **gp_pcbs;                  /* array of pcbs */
 PCB *gp_current_process = NULL; /* always point to the current RUN process */
+
+PCB* PCBReadyQueue[5];
+PCB* PCBBlockedQueue[5];
 
 /* process initialization table */
 PROC_INIT g_proc_table[NUM_TEST_PROCS];
@@ -72,18 +77,10 @@ void process_init()
 
 PCB *scheduler(void)
 {
-	if (gp_current_process == NULL) {
-		gp_current_process = gp_pcbs[0]; 
-		return gp_pcbs[0];
-	}
+	gp_current_process = dequeuePriority( (void*) PCBReadyQueue ); 
+	// Returns NULL if no nodes in Ready Queue
+	return gp_current_process;
 
-	if ( gp_current_process == gp_pcbs[0] ) {
-		return gp_pcbs[1];
-	} else if ( gp_current_process == gp_pcbs[1] ) {
-		return gp_pcbs[0];
-	} else {
-		return NULL;
-	}
 }
 
 /*@brief: switch out old pcb (p_pcb_old), run the new pcb (gp_current_process)
@@ -133,6 +130,7 @@ int process_switch(PCB *p_pcb_old)
 int k_release_processor(void)
 {
 	PCB *p_pcb_old = NULL;
+	int retCode;
 	
 	p_pcb_old = gp_current_process;
 	gp_current_process = scheduler();
@@ -141,9 +139,13 @@ int k_release_processor(void)
 		gp_current_process = p_pcb_old; // revert back to the old process
 		return RTX_ERR;
 	}
-        if ( p_pcb_old == NULL ) {
+   if ( p_pcb_old == NULL ) {
 		p_pcb_old = gp_current_process;
 	}
-	process_switch(p_pcb_old);
-	return RTX_OK;
+	retCode = process_switch(p_pcb_old);
+	if( retCode == RTX_OK ) {
+		enqueuePriority( (void*) PCBReadyQueue, p_pcb_old );
+	}
+	
+	return retCode;
 }

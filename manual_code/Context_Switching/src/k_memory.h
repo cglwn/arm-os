@@ -17,8 +17,8 @@
 
 /* ----- Variables ----- */
 typedef struct mem_block {
-	mem_block *mbNext;
-	U8 *uMemory;
+	struct mem_block *mbNext;
+	U32 *uMemory;
 }MEM_BLOCK;
 
 /* This symbol is defined in the scatter file (see RVCT Linker User Guide) */  
@@ -33,7 +33,8 @@ void *k_request_memory_block(void);
 int k_release_memory_block(void *);
 
 /* ----- Helper Functions ------ */
-void enableInterrupts( bool nEnable ); 
+void enableInterrupts( BOOLEAN nEnable ); 
+void initializeMemBlock(MEM_BLOCK *mbBlock, U32* uMemory);
 
 
 #endif /* ! K_MEM_H_ */

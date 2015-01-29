@@ -15,7 +15,8 @@
 U32 *gp_stack; /* The last allocated stack low address. 8 bytes aligned */
                /* The first stack starts at the RAM high address */
 	       /* stack grows down. Fully decremental stack */
-
+U32 *start_of_heap;
+MEM_BLOCK *mbHead;
 /**
  * @brief: Initialize RAM as follows:
 
@@ -47,6 +48,7 @@ U32 *gp_stack; /* The last allocated stack low address. 8 bytes aligned */
 void memory_init(void)
 {
 	U8 *p_end = (U8 *)&Image$$RW_IRAM1$$ZI$$Limit;
+	U32* blockStart;
 	int i;
   
 	/* 4 bytes padding */
@@ -73,9 +75,18 @@ void memory_init(void)
 	}
   
 	/* allocate memory for heap, not implemented yet*/
-  U32 *heap = p_end;
-	while(heap < gp_stack && (heap+HEAP_BLOCK_SIZE) < gp_stack) {
-	    
+	start_of_heap = (U32*) p_end;
+	blockStart = (U32*) p_end;
+	if(blockStart < gp_stack) {
+		MEM_BLOCK *mbCurrent = mbHead;
+		initializeMemBlock(mbHead, blockStart);
+		while(blockStart < gp_stack && (blockStart+HEAP_BLOCK_SIZE) < gp_stack) {
+			MEM_BLOCK *pBlock;
+			blockStart += HEAP_BLOCK_SIZE;
+			initializeMemBlock( pBlock , blockStart);
+			mbCurrent->mbNext = pBlock;
+			mbCurrent = pBlock;
+		}
 	}
 }
 
@@ -102,33 +113,52 @@ U32 *alloc_stack(U32 size_b)
 }
 
 void *k_request_memory_block(void) {
+	MEM_BLOCK *tempBlock = NULL;
 #ifdef DEBUG_0 
 	printf("k_request_memory_block: entering...\n");
 #endif /* ! DEBUG_0 */
 	enableInterrupts(false);
-	
+	while(!mbHead) {
+		//TODO: release processor
+	}
+	tempBlock = mbHead;
+	mbHead = mbHead->mbNext;
 	enableInterrupts(true);
+	return tempBlock->uMemory;
 }
 
 int k_release_memory_block(void *p_mem_blk) {
+	MEM_BLOCK *tempBlock;
+	MEM_BLOCK *tempNext = mbHead;
 #ifdef DEBUG_0 
 	printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
 #endif /* ! DEBUG_0 */
+	enableInterrupts(false);
+	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
+			(U32*)p_mem_blk < gp_stack &&
+			(U32*)p_mem_blk >= start_of_heap)){
+		return RTX_ERR;
+	}
+	initializeMemBlock(tempBlock, p_mem_blk);
+	mbHead = tempBlock;
+	mbHead->mbNext = tempNext;
+	//TODO: pop blocked_resource_q
+	enableInterrupts(true);
 	return RTX_OK;
 }
 
 
 /* ----- Helper Functions ------ */
-void enableInterrupts( bool nEnable )
+void enableInterrupts( BOOLEAN nEnable )
 {
-	if( nEnable ) {
+	if( nEnable == true ) {
 		__enable_irq();
 	} else {
 		__disable_irq();
 	}
 }
 
-void initializeMemBlk(mem_blk *mbBlock, U8* uMemory) {
-	mbBlock->next = NULL;
+void initializeMemBlock(MEM_BLOCK *mbBlock, U32* uMemory) {
+	mbBlock->mbNext = NULL;
 	mbBlock->uMemory = uMemory;
 }

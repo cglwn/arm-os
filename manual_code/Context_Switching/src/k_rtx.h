@@ -22,21 +22,27 @@
 #define USR_SZ_STACK 0x100         /* user proc stack size 218B  */
 #endif /* DEBUG_0 */
 
+#define BOOLEAN unsigned char
+#define true 1
+#define false 0
+
+#define NUM_PRIORITIES 5
+
 /*----- Types -----*/
 typedef unsigned char U8;
 typedef unsigned int U32;
 
 /* process states, note we only assume three states in this example */
-typedef enum {NEW = 0, RDY, RUN} PROC_STATE_E;  
+typedef enum {NEW = 0, RDY, RUN, BLOCKED, INTERRUPTED} PROC_STATE_E;  
 
 /*
   PCB data structure definition.
   You may want to add your own member variables
   in order to finish P1 and the entire project 
 */
-typedef struct pcb 
+typedef struct pcb
 { 
-	//struct pcb *mp_next;  /* next pcb, not used in this example */  
+	struct pcb *mp_next;  /* next pcb, not used in this example */  
 	U32 *mp_sp;				/* stack pointer of the process */
 	U32 m_pid;				/* process id */
 	U32 m_priority;  		/* initial priority */
@@ -51,5 +57,17 @@ typedef struct proc_init
 	int m_stack_size;       /* size of stack in words */
 	void (*mpf_start_pc) ();/* entry point of the process */    
 } PROC_INIT;
+
+
+typedef PCB* PCBPriority;
+
+/*----- Globals -----*/
+
+extern PCB* PCBReadyQueue[5];
+extern PCB* PCBBlockedQueue[5];
+
+//PCBPriority PCBReadyQueue[5];
+//PCBPriority PCBBlockedQueue[5];
+
 
 #endif // ! K_RTX_H_
