@@ -1,0 +1,1242 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Project:</h2>
+N:\SE350\SE350\manual_code\Context_Switching\context_switching.uvproj
+Project File Date:  01/29/2015
+
+<h2>Output:</h2>
+Build target 'Context Switching SIM'
+assembling startup_LPC17xx.s...
+compiling system_LPC17xx.c...
+compiling uart_polling.c...
+compiling printf.c...
+compiling main_svc.c...
+compiling HAL.c...
+compiling k_rtx_init.c...
+src\k_memory.h(20): error:  #20: identifier "mem_block" is undefined
+src\k_memory.h(22): error:  #20: identifier "bool" is undefined
+src\k_memory.h(37): error:  #20: identifier "bool" is undefined
+compiling k_memory.c...
+src\k_memory.h(20): error:  #20: identifier "mem_block" is undefined
+src\k_memory.h(22): error:  #20: identifier "bool" is undefined
+src\k_memory.h(37): error:  #20: identifier "bool" is undefined
+src\k_memory.c(77): error:  #513: a value of type "U8 *" cannot be assigned to an entity of type "U32 *"
+src\k_memory.c(78): error:  #42: operand types are incompatible ("U8 *" and "U32 *")
+src\k_memory.c(79): warning:  #223-D: function "initializeMemBlock" declared implicitly
+src\k_memory.c(80): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(80): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(81): error:  #42: operand types are incompatible ("U8 *" and "U32 *")
+src\k_memory.c(81): error:  #42: operand types are incompatible ("U8 *" and "U32 *")
+src\k_memory.c(83): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(85): error:  #44: expression must have pointer type
+src\k_memory.c(86): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(117): error:  #20: identifier "false" is undefined
+src\k_memory.c(118): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(118): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(122): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(124): error:  #20: identifier "true" is undefined
+src\k_memory.c(125): error:  #44: expression must have pointer type
+src\k_memory.c(132): error:  #20: identifier "false" is undefined
+src\k_memory.c(133): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(138): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(138): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(139): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(140): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(142): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(144): error:  #20: identifier "true" is undefined
+src\k_memory.c(150): error:  #20: identifier "bool" is undefined
+src\k_memory.c(159): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(159): error:  #159: declaration is incompatible with previous "initializeMemBlk" (declared at line 140)
+compiling k_process.c...
+src\k_utilities.h(11): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(12): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #20: identifier "PCBReadyQueue" is undefined
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #20: identifier "PCBReadyQueue" is undefined
+compiling k_utilities.c...
+src\k_utilities.h(11): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(12): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(7): error:  #136: struct "pcb" has no field "mp_next"
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(15): error:  #136: struct "pcb" has no field "mp_next"
+src\k_utilities.c(16): error:  #136: struct "pcb" has no field "mp_next"
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(21): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(31): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.c(34): warning:  #1-D: last line of file ends without a newline
+compiling usr_proc.c...
+Target not created
+compiling k_memory.c...
+src\k_rtx.h(58): error:  #40: expected an identifier
+src\k_rtx.h(58): error:  #65: expected a ";"
+src\k_rtx.h(62): error:  #20: identifier "PCBPriority" is undefined
+src\k_rtx.h(63): error:  #20: identifier "PCBPriority" is undefined
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c - 30 Error(s), 1 Warning(s).
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+src\k_rtx.h(58): warning:  #260-D: explicit type is missing ("int" assumed)
+src\k_rtx.h(58): error:  #65: expected a ";"
+src\k_rtx.h(62): error:  #20: identifier "PCBPriority" is undefined
+src\k_rtx.h(63): error:  #20: identifier "PCBPriority" is undefined
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+compiling k_memory.c...
+src\k_rtx.h(58): warning:  #260-D: explicit type is missing ("int" assumed)
+src\k_rtx.h(58): error:  #65: expected a ";"
+src\k_rtx.h(62): error:  #20: identifier "PCBPriority" is undefined
+src\k_rtx.h(63): error:  #20: identifier "PCBPriority" is undefined
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+compiling k_process.c...
+src\k_rtx.h(58): warning:  #260-D: explicit type is missing ("int" assumed)
+src\k_rtx.h(58): error:  #65: expected a ";"
+src\k_rtx.h(62): error:  #20: identifier "PCBPriority" is undefined
+src\k_rtx.h(63): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(11): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(12): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+compiling k_utilities.c...
+src\k_rtx.h(58): warning:  #260-D: explicit type is missing ("int" assumed)
+src\k_rtx.h(58): error:  #65: expected a ";"
+src\k_rtx.h(62): error:  #20: identifier "PCBPriority" is undefined
+src\k_rtx.h(63): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(11): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(12): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(21): error:  #20: identifier "PCBPriority" is undefined
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(31): error:  #20: identifier "PCBPriority" is undefined
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+src\k_rtx.h(58): error:  #20: identifier "pcb" is undefined
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+compiling k_memory.c...
+src\k_rtx.h(58): error:  #20: identifier "pcb" is undefined
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_rtx.h(58): error:  #20: identifier "pcb" is undefined
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+compiling k_utilities.c...
+src\k_rtx.h(58): error:  #20: identifier "pcb" is undefined
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+compiling k_memory.c...
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+compiling k_utilities.c...
+src\k_rtx.h(62): error:  #20: identifier "pcb" is undefined
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+compiling k_memory.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+compiling k_utilities.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+src\k_rtx.h(62): error:  #20: identifier "new" is undefined
+src\k_rtx.h(62): error:  #65: expected a ";"
+src\k_rtx.h(63): error:  #65: expected a ";"
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+compiling k_memory.c...
+src\k_rtx.h(62): error:  #20: identifier "new" is undefined
+src\k_rtx.h(62): error:  #65: expected a ";"
+src\k_rtx.h(63): error:  #65: expected a ";"
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+compiling k_process.c...
+src\k_rtx.h(62): error:  #20: identifier "new" is undefined
+src\k_rtx.h(62): error:  #65: expected a ";"
+src\k_rtx.h(63): error:  #65: expected a ";"
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+compiling k_utilities.c...
+src\k_rtx.h(62): error:  #20: identifier "new" is undefined
+src\k_rtx.h(62): error:  #65: expected a ";"
+src\k_rtx.h(63): error:  #65: expected a ";"
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+compiling k_memory.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+compiling k_utilities.c...
+src\k_rtx.h(62): error:  #254: type name is not allowed
+src\k_rtx.h(63): error:  #254: type name is not allowed
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+compiling k_memory.c...
+src\k_memory.h(37): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(<error-type> *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+compiling k_memory.c...
+src\k_memory.c(78): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(84): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(86): error:  #44: expression must have pointer type
+src\k_memory.c(87): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(118): error:  #20: identifier "false" is undefined
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(123): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(125): error:  #20: identifier "true" is undefined
+src\k_memory.c(126): error:  #44: expression must have pointer type
+src\k_memory.c(133): error:  #20: identifier "false" is undefined
+src\k_memory.c(134): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(139): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(139): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(140): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(141): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(143): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(145): error:  #20: identifier "true" is undefined
+src\k_memory.c(151): error:  #20: identifier "bool" is undefined
+src\k_memory.c(160): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(160): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(161): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+compiling k_memory.c...
+src\k_memory.c(82): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(82): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(85): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(87): error:  #44: expression must have pointer type
+src\k_memory.c(88): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(119): error:  #20: identifier "false" is undefined
+src\k_memory.c(120): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(120): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(126): error:  #20: identifier "true" is undefined
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(134): error:  #20: identifier "false" is undefined
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(146): error:  #20: identifier "true" is undefined
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+src\k_memory.c - 25 Error(s), 2 Warning(s).
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(81): error:  #144: a value of type "MEM_BLOCK *" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(85): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(87): error:  #44: expression must have pointer type
+src\k_memory.c(88): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(119): error:  #20: identifier "false" is undefined
+src\k_memory.c(120): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(120): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(126): error:  #20: identifier "true" is undefined
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(134): error:  #20: identifier "false" is undefined
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(146): error:  #20: identifier "true" is undefined
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(85): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(87): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(119): error:  #20: identifier "false" is undefined
+src\k_memory.c(120): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(120): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(126): error:  #20: identifier "true" is undefined
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(134): error:  #20: identifier "false" is undefined
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(146): error:  #20: identifier "true" is undefined
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(87): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(119): error:  #20: identifier "false" is undefined
+src\k_memory.c(120): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(120): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(126): error:  #20: identifier "true" is undefined
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(134): error:  #20: identifier "false" is undefined
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(146): error:  #20: identifier "true" is undefined
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(119): error:  #20: identifier "false" is undefined
+src\k_memory.c(120): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(120): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(126): error:  #20: identifier "true" is undefined
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(134): error:  #20: identifier "false" is undefined
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(146): error:  #20: identifier "true" is undefined
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+compiling k_memory.c...
+src\k_memory.c(120): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(120): error:  #144: a value of type "int" cannot be used to initialize an entity of type "MEM_BLOCK"
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(119): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(119): error:  #119: cast to type "MEM_BLOCK" is not allowed
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(124): error:  #513: a value of type "MEM_BLOCK *" cannot be assigned to an entity of type "MEM_BLOCK"
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(127): error:  #44: expression must have pointer type
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(125): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(135): error:  #852: expression must be a pointer to a complete object type
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(140): error:  #268: declaration may not appear after executable statement in block
+src\k_memory.c(140): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(141): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(131): error:  #20: identifier "MEM_BLK" is undefined
+src\k_memory.c(131): error:  #20: identifier "tempBlock" is undefined
+src\k_memory.c(132): error:  #20: identifier "tempNext" is undefined
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+compiling k_memory.c...
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+src\k_memory.c - 6 Error(s), 2 Warning(s).
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(142): warning:  #223-D: function "initializeMemBlk" declared implicitly
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(144): error:  #136: struct "mem_block" has no field "next"
+src\k_memory.c(152): error:  #20: identifier "bool" is undefined
+src\k_memory.c(161): error:  #20: identifier "mem_blk" is undefined
+src\k_memory.c(161): error:  #147-D: declaration is incompatible with "void initializeMemBlock(MEM_BLOCK *, U32 *)" (declared at line 37 of "src\k_memory.h")
+src\k_memory.c(162): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(163): error:  #132: expression must have pointer-to-struct-or-union type
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+src\k_memory.c(164): warning:  #1-D: last line of file ends without a newline
+compiling k_process.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(141): error:  #268: declaration may not appear after executable statement in block
+src\k_process.c(143): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.h(15): warning:  #1-D: last line of file ends without a newline
+src\k_utilities.c(6): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(14): error:  #268: declaration may not appear after executable statement in block
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_memory.c...
+compiling k_process.c...
+src\k_process.c(77): error:  #167: argument of type "PCBPriority (*)[5]" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority (*)[5]" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_process.c(77): error:  #167: argument of type "PCBPriority (*)[5]" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority (*)[5]" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(18): error:  #136: struct "pcb" has no field "mb_next"
+src\k_utilities.c(23): error:  #29: expected an expression
+src\k_utilities.c(23): error:  #20: identifier "i" is undefined
+src\k_utilities.c(23): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #65: expected a ";"
+src\k_utilities.c(33): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_process.c(77): error:  #167: argument of type "PCBPriority (*)[5]" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority (*)[5]" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(26): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(34): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(26): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(34): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(21): error:  #18: expected a ")"
+src\k_utilities.c(21): error:  #141-D: unnamed prototyped parameters not allowed when body is present
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #20: identifier "pcbQueue" is undefined
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(34): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_utilities.h(11): error:  #18: expected a ")"
+src\k_utilities.h(12): error:  #18: expected a ")"
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #140: too many arguments in function call
+compiling k_utilities.c...
+src\k_utilities.h(11): error:  #18: expected a ")"
+src\k_utilities.h(12): error:  #18: expected a ")"
+src\k_utilities.c(21): error:  #18: expected a ")"
+src\k_utilities.c(21): error:  #141-D: unnamed prototyped parameters not allowed when body is present
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #20: identifier "pcbQueue" is undefined
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(32): error:  #18: expected a ")"
+src\k_utilities.c(32): error:  #141-D: unnamed prototyped parameters not allowed when body is present
+src\k_utilities.c(34): error:  #20: identifier "pcbQueue" is undefined
+src\k_utilities.c(34): error:  #20: identifier "pcbNode" is undefined
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(26): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(34): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_process.c(77): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+src\k_process.c(144): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(26): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(34): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+src\k_process.c(144): error:  #167: argument of type "PCBPriority *" is incompatible with parameter of type "PCBPriority"
+compiling k_utilities.c...
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(26): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(34): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_process.c...
+compiling k_utilities.c...
+src\k_utilities.c(24): error:  #20: identifier "NUM_PRIORITIES" is undefined
+src\k_utilities.c(25): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(26): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(26): error:  #65: expected a ";"
+src\k_utilities.c(34): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+compiling k_memory.c...
+compiling k_process.c...
+compiling k_utilities.c...
+src\k_utilities.c(26): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(27): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(27): error:  #65: expected a ";"
+src\k_utilities.c(35): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+compiling k_memory.c...
+compiling k_process.c...
+compiling k_utilities.c...
+src\k_utilities.c(26): error:  #41: expression must have arithmetic or pointer type
+src\k_utilities.c(27): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(27): error:  #65: expected a ";"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_utilities.c...
+src\k_utilities.c(26): error:  #158: expression must be an lvalue or a function designator
+src\k_utilities.c(27): error:  #167: argument of type "PCB" is incompatible with parameter of type "PCB *"
+src\k_utilities.c(27): error:  #65: expected a ";"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_utilities.c...
+src\k_utilities.c(26): error:  #158: expression must be an lvalue or a function designator
+src\k_utilities.c(27): error:  #65: expected a ";"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_utilities.c...
+src\k_utilities.c(27): error:  #65: expected a ";"
+Target not created
+Build target 'Context Switching SIM'
+compiling k_utilities.c...
+linking...
+context_switching.axf: Error: L6200E: Symbol PCBReadyQueue multiply defined (by k_memory.o and k_rtx_init.o).
+context_switching.axf: Error: L6200E: Symbol PCBReadyQueue multiply defined (by k_process.o and k_rtx_init.o).
+context_switching.axf: Error: L6200E: Symbol PCBReadyQueue multiply defined (by k_utilities.o and k_rtx_init.o).
+context_switching.axf: Error: L6200E: Symbol PCBBlockedQueue multiply defined (by k_memory.o and k_rtx_init.o).
+context_switching.axf: Error: L6200E: Symbol PCBBlockedQueue multiply defined (by k_process.o and k_rtx_init.o).
+context_switching.axf: Error: L6200E: Symbol PCBBlockedQueue multiply defined (by k_utilities.o and k_rtx_init.o).
+Target not created
+Build target 'Context Switching SIM'
+compiling main_svc.c...
+compiling k_rtx_init.c...
+src\k_rtx_init.c(13): warning:  #177-D: variable "PCBReadyQueue" was declared but never referenced
+src\k_rtx_init.c(14): warning:  #177-D: variable "PCBBlockedQueue" was declared but never referenced
+compiling k_memory.c...
+compiling k_process.c...
+src\k_process.c(77): error:  #20: identifier "PCBReadyQueue" is undefined
+src\k_process.c(144): error:  #20: identifier "PCBReadyQueue" is undefined
+compiling k_utilities.c...
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+compiling k_memory.c...
+compiling k_process.c...
+src\k_process.c(31): error:  #147: declaration is incompatible with "PCB **PCBReadyQueue" (declared at line 66 of "src\k_rtx.h")
+src\k_process.c(32): error:  #147: declaration is incompatible with "PCB **PCBBlockedQueue" (declared at line 67 of "src\k_rtx.h")
+compiling k_utilities.c...
+Target not created
+Build target 'Context Switching SIM'
+compiling k_rtx_init.c...
+compiling k_memory.c...
+compiling k_process.c...
+compiling k_utilities.c...
+linking...
+Program Size: Code=3592 RO-data=236 RW-data=32 ZI-data=712  
+"context_switching.axf" - 0 Error(s), 0 Warning(s).
