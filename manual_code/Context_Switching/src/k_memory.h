@@ -12,8 +12,15 @@
 
 /* ----- Definitions ----- */
 #define RAM_END_ADDR 0x10008000
+#define HEAP_BLOCK_SIZE 0x100
+/* ----- Types ----- */
 
 /* ----- Variables ----- */
+typedef struct mem_block {
+	mem_block *mbNext;
+	U8 *uMemory;
+}MEM_BLOCK;
+
 /* This symbol is defined in the scatter file (see RVCT Linker User Guide) */  
 extern unsigned int Image$$RW_IRAM1$$ZI$$Limit; 
 extern PCB **gp_pcbs;
@@ -24,5 +31,9 @@ void memory_init(void);
 U32 *alloc_stack(U32 size_b);
 void *k_request_memory_block(void);
 int k_release_memory_block(void *);
+
+/* ----- Helper Functions ------ */
+void enableInterrupts( bool nEnable ); 
+
 
 #endif /* ! K_MEM_H_ */

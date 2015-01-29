@@ -27,7 +27,7 @@ U32 *gp_stack; /* The last allocated stack low address. 8 bytes aligned */
           |                           |
           |        HEAP               |
           |                           |
-          |---------------------------|
+          |---------------------------|<--- p_end
           |        PCB 2              |
           |---------------------------|
           |        PCB 1              |
@@ -73,7 +73,10 @@ void memory_init(void)
 	}
   
 	/* allocate memory for heap, not implemented yet*/
-  
+  U32 *heap = p_end;
+	while(heap < gp_stack && (heap+HEAP_BLOCK_SIZE) < gp_stack) {
+	    
+	}
 }
 
 /**
@@ -102,7 +105,9 @@ void *k_request_memory_block(void) {
 #ifdef DEBUG_0 
 	printf("k_request_memory_block: entering...\n");
 #endif /* ! DEBUG_0 */
-	return (void *) NULL;
+	enableInterrupts(false);
+	
+	enableInterrupts(true);
 }
 
 int k_release_memory_block(void *p_mem_blk) {
@@ -110,4 +115,20 @@ int k_release_memory_block(void *p_mem_blk) {
 	printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
 #endif /* ! DEBUG_0 */
 	return RTX_OK;
+}
+
+
+/* ----- Helper Functions ------ */
+void enableInterrupts( bool nEnable )
+{
+	if( nEnable ) {
+		__enable_irq();
+	} else {
+		__disable_irq();
+	}
+}
+
+void initializeMemBlk(mem_blk *mbBlock, U8* uMemory) {
+	mbBlock->next = NULL;
+	mbBlock->uMemory = uMemory;
 }
