@@ -9,5 +9,3 @@ k_process.o: src\uart_polling.h
 k_process.o: src\k_process.h
 k_process.o: src\k_rtx.h
 k_process.o: src\k_utilities.h
-k_process.o: src\printf.h
-k_process.o: C:\Software\Keil\ARM\ARMCC\bin\..\include\stdarg.h

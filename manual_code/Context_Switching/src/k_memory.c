@@ -52,6 +52,7 @@ void memory_init(void)
 	U8 *p_end = (U8 *)&Image$$RW_IRAM1$$ZI$$Limit;
 	U32* blockStart;
 	int i;
+	int num_blocks = 1;
   
 	/* 4 bytes padding */
 	p_end += 4;
@@ -80,16 +81,23 @@ void memory_init(void)
 	start_of_heap = (U32*) p_end;
 	blockStart = (U32*) p_end;
 	if(blockStart < gp_stack) {
-		MEM_BLOCK *mbCurrent = mbHead;
-		initializeMemBlock(mbHead, blockStart);
-		while(blockStart < gp_stack && (blockStart+HEAP_BLOCK_SIZE) < gp_stack) {
+		MEM_BLOCK *mbCurrent;
+		mbHead = (MEM_BLOCK *) blockStart;
+		mbCurrent = mbHead;
+		initializeMemBlock(mbCurrent, blockStart);
+		while(blockStart < gp_stack && (blockStart+HEAP_BLOCK_SIZE) < gp_stack && num_blocks < NUM_MEM_BLOCKS) {
 			MEM_BLOCK *pBlock;
 			blockStart += HEAP_BLOCK_SIZE;
+			pBlock = (MEM_BLOCK *) blockStart;
 			initializeMemBlock( pBlock , blockStart);
 			mbCurrent->mbNext = pBlock;
 			mbCurrent = pBlock;
+			num_blocks++;
 		}
 	}
+#ifdef DEBUG_0  
+	printf("mbHead = 0x%x \n", mbHead->uMemory);
+#endif
 }
 
 /**
@@ -134,19 +142,31 @@ void *k_request_memory_block(void) {
 int k_release_memory_block(void *p_mem_blk) {
 	MEM_BLOCK *tempBlock;
 	MEM_BLOCK *tempNext = mbHead;
+	PCB* blockedPCB;
 #ifdef DEBUG_0 
 	printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
 #endif /* ! DEBUG_0 */
 	enableInterrupts(false);
+	
+	//error if memory is not aligned
 	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
 			(U32*)p_mem_blk < gp_stack &&
 			(U32*)p_mem_blk >= start_of_heap)){
 		return RTX_ERR;
 	}
+	
+	//put freed memory block back in heap
+	tempBlock = p_mem_blk;
 	initializeMemBlock(tempBlock, p_mem_blk);
 	mbHead = tempBlock;
 	mbHead->mbNext = tempNext;
-	handle_process_ready(dequeuePriority(PCBBlockedQueue));
+	
+	//put blocked process in ready queue
+	blockedPCB = dequeuePriority(PCBBlockedQueue);
+	if(blockedPCB) {
+		blockedPCB->m_state = RDY;
+		handle_process_ready(blockedPCB);
+	}
 	enableInterrupts(true);
 	return RTX_OK;
 }
@@ -155,6 +175,7 @@ int k_release_memory_block(void *p_mem_blk) {
 /* ----- Helper Functions ------ */
 void enableInterrupts( BOOLEAN nEnable )
 {
+	return;
 	if( nEnable == true ) {
 		__enable_irq();
 	} else {
@@ -163,6 +184,9 @@ void enableInterrupts( BOOLEAN nEnable )
 }
 
 void initializeMemBlock(MEM_BLOCK *mbBlock, U32* uMemory) {
+#ifdef DEBUG_0  
+	printf("%d\n", uMemory);
+#endif
 	mbBlock->mbNext = NULL;
 	mbBlock->uMemory = uMemory;
 }

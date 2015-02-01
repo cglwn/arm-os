@@ -22,6 +22,7 @@
 
 #ifdef DEBUG_0
 #include "printf.h"
+#include "assert.h"
 #endif /* DEBUG_0 */
 
 /* ----- Global Variables ----- */
@@ -44,12 +45,17 @@ void process_init()
 	int i;
 	U32 *sp;
   
+	for ( i = 0; i < NUM_PRIORITIES; i++)  {
+		PCBReadyQueue[i] = NULL;
+		PCBBlockedQueue[i] = NULL;
+	}
         /* fill out the initialization table */
 	set_test_procs();
 	for ( i = 0; i < NUM_TEST_PROCS; i++ ) {
 		g_proc_table[i].m_pid = g_test_procs[i].m_pid;
 		g_proc_table[i].m_stack_size = g_test_procs[i].m_stack_size;
 		g_proc_table[i].mpf_start_pc = g_test_procs[i].mpf_start_pc;
+		g_proc_table[i].m_priority = g_test_procs[i].m_priority;
 	}
   
 	/* initilize exception stack frame (i.e. initial context) for each process */
@@ -57,7 +63,8 @@ void process_init()
 		int j;
 		(gp_pcbs[i])->m_pid = (g_proc_table[i]).m_pid;
 		(gp_pcbs[i])->m_state = NEW;
-		
+		(gp_pcbs[i])->m_priority = (g_proc_table[i]).m_priority;
+		(gp_pcbs[i])->mp_next = NULL;
 		sp = alloc_stack((g_proc_table[i]).m_stack_size);
 		*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 		*(--sp)  = (U32)((g_proc_table[i]).mpf_start_pc); // PC contains the entry point of the process
@@ -65,6 +72,7 @@ void process_init()
 			*(--sp) = 0x0;
 		}
 		(gp_pcbs[i])->mp_sp = sp;
+		enqueuePriority(PCBReadyQueue, gp_pcbs[i]);
 	}
 }
 
@@ -77,7 +85,12 @@ void process_init()
 
 PCB *scheduler(void)
 {
-	gp_current_process = dequeuePriority( (void*) PCBReadyQueue ); 
+	int highestPriority = peekPriority(PCBReadyQueue);
+	if (gp_current_process != NULL && highestPriority > gp_current_process->m_priority && gp_current_process->m_state != BLOCKED) { 
+		return gp_current_process;
+	} else {
+		gp_current_process = dequeuePriority(PCBReadyQueue);
+	}
 	// Returns NULL if no nodes in Ready Queue
 	return gp_current_process;
 
@@ -94,13 +107,18 @@ PCB *scheduler(void)
 int process_switch(PCB *p_pcb_old) 
 {
 	PROC_STATE_E state;
-	
+	PROC_STATE_E old_state;
 	state = gp_current_process->m_state;
-
+	old_state = p_pcb_old->m_state;
 	if (state == NEW) {
 		if (gp_current_process != p_pcb_old && p_pcb_old->m_state != NEW) {
-			p_pcb_old->m_state = RDY;
+			if (old_state != BLOCKED) {
+				p_pcb_old->m_state = RDY;
+			}
 			p_pcb_old->mp_sp = (U32 *) __get_MSP();
+			if( ! isInQueuePriority(PCBBlockedQueue, p_pcb_old) && !isInQueuePriority(PCBReadyQueue, p_pcb_old)) {
+				enqueuePriority( PCBReadyQueue, p_pcb_old );
+			}
 		}
 		gp_current_process->m_state = RUN;
 		__set_MSP((U32) gp_current_process->mp_sp);
@@ -111,8 +129,13 @@ int process_switch(PCB *p_pcb_old)
 
 	if (gp_current_process != p_pcb_old) {
 		if (state == RDY){ 		
-			p_pcb_old->m_state = RDY; 
+			if (old_state != BLOCKED) {
+				p_pcb_old->m_state = RDY;
+			}
 			p_pcb_old->mp_sp = (U32 *) __get_MSP(); // save the old process's sp
+			if( ! isInQueuePriority(PCBBlockedQueue, p_pcb_old) && !isInQueuePriority(PCBReadyQueue, p_pcb_old)) {
+				enqueuePriority( PCBReadyQueue, p_pcb_old );
+			}
 			gp_current_process->m_state = RUN;
 			__set_MSP((U32) gp_current_process->mp_sp); //switch to the new proc's stack    
 		} else {
@@ -142,20 +165,20 @@ int k_release_processor(void)
    if ( p_pcb_old == NULL ) {
 		p_pcb_old = gp_current_process;
 	}
-	retCode = process_switch(p_pcb_old);
-	if( retCode == RTX_OK ) {
-		enqueuePriority( (void*) PCBReadyQueue, p_pcb_old );
-	}
-	
-	return retCode;
+
+	return process_switch(p_pcb_old);
 }
 
 void handle_process_ready(PCB* process) {
-	PCB *p_pcb_old = gp_current_process;
-	gp_current_process = process;
-	process_switch(p_pcb_old);
+	//PCB *p_pcb_old = gp_current_process;
+	//gp_current_process = process;
+	//process_switch(p_pcb_old);
+	if( ! isInQueuePriority(PCBBlockedQueue, process) && !isInQueuePriority(PCBReadyQueue, process)) {
+		enqueuePriority(PCBReadyQueue, process);
+	}
+	k_release_processor();
 }
-int set_process_priority(int process_id, int priority){
+int k_set_process_priority(int process_id, int priority){
 	//gp_pcbs
 	int i;
 	if (process_id == 0 || priority == 4){
@@ -164,14 +187,34 @@ int set_process_priority(int process_id, int priority){
 	
 	for(i = 0; i < NUM_TEST_PROCS; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
+			// retCode = 0 for Ready ; 1 for Blocked ; -1 for fail
+			int retCode = rmvFromPriorityQueue( PCBReadyQueue, PCBBlockedQueue, gp_pcbs[i] );
+			
 			gp_pcbs[i]->m_priority = priority;
+			
+			if( retCode == 0 ) {
+				gp_pcbs[i]->m_state = RDY;
+				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i]) {
+					enqueuePriority( PCBReadyQueue, gp_pcbs[i] );
+				}
+			} else if ( retCode == 1 ) {
+				gp_pcbs[i]->m_state = BLOCKED;
+				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i]) {
+					enqueuePriority( PCBBlockedQueue, gp_pcbs[i] );
+				}
+			} else {
+#ifdef DEBUG_0
+				assert(0);
+#endif /* DEBUG_0 */
+			}
+			k_release_processor();
 			return RTX_OK;
 		}
 	}
 	return RTX_ERR;
 }
 
-int get_process_priority(int process_id){
+int k_get_process_priority(int process_id){
 		int i;
 	for(i = 0; i < NUM_TEST_PROCS; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {

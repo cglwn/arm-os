@@ -13,6 +13,7 @@
 /* ----- Definitions ----- */
 #define RAM_END_ADDR 0x10008000
 #define HEAP_BLOCK_SIZE 0x100
+#define NUM_MEM_BLOCKS 0x2
 /* ----- Types ----- */
 
 /* ----- Variables ----- */
