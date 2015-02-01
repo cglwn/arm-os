@@ -1,0 +1,8 @@
+- Pre-emption by setting another process as a higher priority (P3 pre-empted by P4 by setting it as HIGH priority)
+- Blocked by memory request (P1 requests memory every loop iteration)
+- Unblocked by memory free (P2 unblocks P1)
+- Pre-empted by unblock (P1 unblocked by P2)
+
+Stuff to Test:
+- Multiple in blocked queue 
+- Free memory with none in blocked queue
