@@ -79,13 +79,6 @@ void set_test_procs() {
 	uart0_put_string("\n\r\n\r");
 }
 
-
-void null_proc(void) { 
-	while(1) {
-		release_processor();
-	}
-}
-
 /**
  * @brief: a process that prints five uppercase letters
  *         and request a memory block.

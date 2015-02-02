@@ -74,6 +74,19 @@ void process_init()
 		(gp_pcbs[i])->mp_sp = sp;
 		enqueuePriority(PCBReadyQueue, gp_pcbs[i]);
 	}
+	
+	(gp_pcbs[NUM_TEST_PROCS])->m_pid = 0;
+		(gp_pcbs[NUM_TEST_PROCS])->m_state = NEW;
+		(gp_pcbs[NUM_TEST_PROCS])->m_priority = NUM_PRIORITIES - 1;
+		(gp_pcbs[NUM_TEST_PROCS])->mp_next = NULL;
+		sp = alloc_stack(0x100);
+		*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+		*(--sp)  = (U32)(&null_proc); // PC contains the entry point of the process
+		for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+			*(--sp) = 0x0;
+		}
+		(gp_pcbs[NUM_TEST_PROCS])->mp_sp = sp;
+		enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS]);
 }
 
 /*@brief: scheduler, pick the pid of the next to run process
@@ -222,4 +235,10 @@ int k_get_process_priority(int process_id){
 		}
 	}
 	return RTX_ERR;
+}
+
+void null_proc(void) { 
+	while(1) {
+		k_release_processor();
+	}
 }
