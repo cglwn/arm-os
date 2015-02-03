@@ -75,6 +75,7 @@ void process_init()
 		enqueuePriority(PCBReadyQueue, gp_pcbs[i]);
 	}
 	
+	/*Initialize null process*/
 	(gp_pcbs[NUM_TEST_PROCS])->m_pid = 0;
 		(gp_pcbs[NUM_TEST_PROCS])->m_state = NEW;
 		(gp_pcbs[NUM_TEST_PROCS])->m_priority = NUM_PRIORITIES - 1;
@@ -156,6 +157,11 @@ int process_switch(PCB *p_pcb_old)
 			return RTX_ERR;
 		} 
 	}
+	
+	if (gp_current_process == p_pcb_old) {
+		gp_current_process->m_state = RUN;
+	}
+	
 	return RTX_OK;
 }
 /**
@@ -194,6 +200,7 @@ void handle_process_ready(PCB* process) {
 int k_set_process_priority(int process_id, int priority){
 	//gp_pcbs
 	int i;
+	int queueCode = -1;
 	if (process_id == 0 || priority == 4){
 		return RTX_ERR;
 	}
@@ -201,21 +208,37 @@ int k_set_process_priority(int process_id, int priority){
 	for(i = 0; i < NUM_TEST_PROCS; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			// retCode = 0 for Ready ; 1 for Blocked ; -1 for fail
-			int retCode = rmvFromPriorityQueue( PCBReadyQueue, PCBBlockedQueue, gp_pcbs[i] );
+			if (isInQueuePriority(PCBReadyQueue, gp_pcbs[i])) {
+				rmvFromPriorityQueue( PCBReadyQueue, gp_pcbs[i] );
+				queueCode = 0;
+			}
+			if (isInQueuePriority(PCBBlockedQueue, gp_pcbs[i])) {
+				rmvFromPriorityQueue( PCBBlockedQueue, gp_pcbs[i] );
+				queueCode = 1;
+			}
 			
 			gp_pcbs[i]->m_priority = priority;
 			
-			if( retCode == 0 ) {
-				gp_pcbs[i]->m_state = RDY;
+			if( queueCode == 0 ) {
+				if ( gp_pcbs[i]->m_state != NEW) {
+					gp_pcbs[i]->m_state = RDY;
+				}
 				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i]) {
 					enqueuePriority( PCBReadyQueue, gp_pcbs[i] );
 				}
-			} else if ( retCode == 1 ) {
+			} else if ( queueCode == 1 ) {
 				gp_pcbs[i]->m_state = BLOCKED;
 				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i]) {
 					enqueuePriority( PCBBlockedQueue, gp_pcbs[i] );
 				}
-			} else {
+			} else if (gp_pcbs[i] == gp_current_process) { 
+				if ( gp_pcbs[i]->m_state != NEW) {
+					gp_pcbs[i]->m_state = RDY;
+				}
+					if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i])) {
+						enqueuePriority( PCBReadyQueue, gp_pcbs[i] );
+					}
+			}	else {
 #ifdef DEBUG_0
 				assert(0);
 #endif /* DEBUG_0 */

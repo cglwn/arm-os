@@ -151,7 +151,8 @@ int k_release_memory_block(void *p_mem_blk) {
 	//error if memory is not aligned
 	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
 			(U32*)p_mem_blk < gp_stack &&
-			(U32*)p_mem_blk >= start_of_heap)){
+			(U32*)p_mem_blk >= start_of_heap) ||
+			isInHeap((U32*)p_mem_blk)){
 		return RTX_ERR;
 	}
 	
@@ -183,6 +184,16 @@ void enableInterrupts( BOOLEAN nEnable )
 	}
 }
 
+BOOLEAN isInHeap(U32* address) { 
+	MEM_BLOCK *tempBlock = mbHead;
+	while(tempBlock != NULL) { 
+		if (tempBlock->uMemory == address) { 
+			return true;
+		}
+		tempBlock = tempBlock->mbNext;
+	}
+	return false;
+}
 void initializeMemBlock(MEM_BLOCK *mbBlock, U32* uMemory) {
 #ifdef DEBUG_0  
 	printf("%d\n", uMemory);

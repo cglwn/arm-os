@@ -10,7 +10,7 @@
 
 PCB* dequeuePriority( PCB**  voidQueue );
 void enqueuePriority ( PCB*  pcbQueue[], PCB* pcbNode );
-int rmvFromPriorityQueue(PCB**  rdyQueue, PCB**  blkQueue, PCB* pcbNode );
+int rmvFromPriorityQueue(PCB**  pcbQueue, PCB* pcbNode );
 int peekPriority( PCB** pcbQueue);
 BOOLEAN isInQueuePriority(PCB** pcbQueue, PCB* pcb);
 #endif // K_UTIL_H_

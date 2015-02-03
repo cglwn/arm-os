@@ -35,7 +35,7 @@ void memory_init(void);
 U32 *alloc_stack(U32 size_b);
 void *k_request_memory_block(void);
 int k_release_memory_block(void *);
-
+BOOLEAN isInHeap(U32* address);
 
 /* ----- Helper Functions ------ */
 void enableInterrupts( BOOLEAN nEnable ); 

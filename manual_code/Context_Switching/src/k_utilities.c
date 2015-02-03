@@ -45,11 +45,11 @@ void enqueuePriority ( PCB*  pcbQueue[], PCB* pcbNode )
 	enqueue( pcbQueue, pcbNode->m_priority,  pcbNode );
 }
 
-int rmvFromPriorityQueue(PCB**  rdyQueue, PCB**  blkQueue, PCB* pcbNode )
+int rmvFromPriorityQueue(PCB**  pcbQueue, PCB* pcbNode )
 {
-	PCB* tempPCB = rdyQueue[ pcbNode->m_priority ];
+	PCB* tempPCB = pcbQueue[ pcbNode->m_priority ];
 	if( tempPCB == pcbNode ) {
-		dequeuePriority( rdyQueue );
+		dequeue( pcbQueue, pcbNode->m_priority);
 		return 0;
 	} else if (tempPCB) {
 		while(tempPCB->mp_next != pcbNode) {
@@ -59,21 +59,6 @@ int rmvFromPriorityQueue(PCB**  rdyQueue, PCB**  blkQueue, PCB* pcbNode )
 			tempPCB->mp_next = pcbNode->mp_next;
 			pcbNode->mp_next = NULL;
 			return 0;
-		}
-	}
-	
-	tempPCB = blkQueue[ pcbNode->m_priority ];
-	if( tempPCB == pcbNode ) {
-		dequeuePriority( rdyQueue );
-		return 1;
-	} else if (tempPCB) {
-		while(tempPCB->mp_next != pcbNode) {
-			tempPCB = tempPCB->mp_next;
-		}
-		if( tempPCB ) {
-			tempPCB->mp_next = pcbNode->mp_next;
-			pcbNode->mp_next = NULL;
-			return 1;
 		}
 	}
 	return 0;
