@@ -106,3 +106,34 @@ BOOLEAN isInQueuePriority(PCB** pcbQueue, PCB* pcb) {
 	}
 	return inQueue;
 }
+
+void enqueue_message_queue( PCB* pcb, msg_header *msg ) {
+	msg_env *tail = pcb->next_msg;
+	if ( tail == null ) {
+		pcb->next_msg = msg;
+		return;
+	}
+	
+	while(tail->next != NULL) {
+		tail = tail->next;
+	}
+	tail->next = msg;
+}
+
+msg_env* dequeue_message_queue( PCB* pcb ) {
+	msg_env msg_queue = pcb->next_msg;
+	if (msg_queue == NULL) {
+			return NULL; 
+	}
+	pcb->next_msg = msg_queue->next;
+	return msg_queue;
+}
+
+void enableInterrupts( BOOLEAN nEnable )
+{
+	if( nEnable == true ) {
+		__enable_irq();
+	} else {
+		__disable_irq();
+	}
+}

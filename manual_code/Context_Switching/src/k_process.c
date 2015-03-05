@@ -251,13 +251,45 @@ int k_set_process_priority(int process_id, int priority){
 }
 
 int k_get_process_priority(int process_id){
-		int i;
+	int i;
 	for(i = 0; i < NUM_TEST_PROCS; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			return gp_pcbs[i]->m_priority;
 		}
 	}
 	return RTX_ERR;
+}
+
+int send_message(int process_id, void *message_envelope) {
+	__disable_irq();
+	msg_header *header = k_request_memory_block();
+	header->source_pid = (U32) gp_current_process->m_pid;
+	header->dest_pid = (U32) process_id;
+	header->msg_env = (msgbuf*) message_envelope;
+	enqueue_message_queue(gp_current_process, header);
+	
+	if (gp_pcbs[process_id]->m_state ==  BLOCKED_ON_RECEIVE) {
+		gp_pcbs[process_id]->m_state = READY;
+		enqueuePriority(PCBReadyQueue, gp_pcbs[process_id]);
+	}
+	__enable_irq();
+}
+
+void *receive_message(int *sender_id) {
+	msg_env *msg_envelope;
+	msgbuf *msg;
+	__disable_irq();
+	while(gp_current_process->next_msg == NULL) {
+		gp_current_process->state = BLOCKED_ON_RECEIVE;
+		__enable_irq();
+		k_release_processor();
+	}
+	__disable_irq();
+	msg_envelope = dequeue_message_queue(gp_current_process);
+	msgbuf = msg_envelope->msg_env;
+	k_release_memory_block(msg_envelope);
+	__enable_irq();
+	return msgbuf;
 }
 
 void null_proc(void) { 

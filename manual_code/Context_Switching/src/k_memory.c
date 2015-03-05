@@ -131,8 +131,10 @@ void *k_request_memory_block(void) {
 	while(!mbHead) {
 		gp_current_process->m_state = BLOCKED;
 		enqueuePriority(PCBBlockedQueue, gp_current_process);
+		enableInterrupts(true);
 		k_release_processor();
 	}
+	enableInterrupts(false);
 	tempBlock = mbHead;
 	mbHead = mbHead->mbNext;
 	enableInterrupts(true);
@@ -176,7 +178,6 @@ int k_release_memory_block(void *p_mem_blk) {
 /* ----- Helper Functions ------ */
 void enableInterrupts( BOOLEAN nEnable )
 {
-	return;
 	if( nEnable == true ) {
 		__enable_irq();
 	} else {

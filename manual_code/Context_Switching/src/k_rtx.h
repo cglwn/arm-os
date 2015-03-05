@@ -28,12 +28,14 @@
 
 #define NUM_PRIORITIES 5
 
+#define DEFAULT 0
+#define KCD_REG 1
 /*----- Types -----*/
 typedef unsigned char U8;
 typedef unsigned int U32;
 
 /* process states, note we only assume three states in this example */
-typedef enum {NEW = 0, RDY, RUN, BLOCKED, INTERRUPTED} PROC_STATE_E;  
+typedef enum {NEW = 0, RDY, RUN, BLOCKED, INTERRUPTED, BLOCKED_ON_RECEIVE} PROC_STATE_E;  
 
 /*
   PCB data structure definition.
@@ -47,7 +49,20 @@ typedef struct pcb
 	U32 m_pid;				/* process id */
 	U32 m_priority;  		/* initial priority */
 	PROC_STATE_E m_state;   /* state of the process */      
+	struct msg_header *next_msg; /*the message queue for this process*/
 } PCB;
+
+typedef struct msgbuf {
+	int mtype; /* user defined message type */
+	char mtext[1]; /* body of the message */
+} MSGBUF;
+
+typedef struct msg_header {
+	struct msg_header *next;
+	U32 source_pid;
+	U32 dest_pid;
+	struct msgbuf *msg_env;
+}MSG_HEADER;
 
 /* initialization table item */
 typedef struct proc_init
