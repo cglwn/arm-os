@@ -13,6 +13,7 @@ void enqueuePriority ( PCB*  pcbQueue[], PCB* pcbNode );
 int rmvFromPriorityQueue(PCB**  pcbQueue, PCB* pcbNode );
 int peekPriority( PCB** pcbQueue);
 BOOLEAN isInQueuePriority(PCB** pcbQueue, PCB* pcb);
-enqueue_message_queue( PCB* pcb, msg_header *msg );
-dequeue_message_queue( PCB* pcb );
+void enqueue_message_queue( PCB* pcb, MSG_HEADER *msg );
+MSG_HEADER* dequeue_message_queue( PCB* pcb );
+void enableInterrupts( BOOLEAN nEnable );
 #endif // K_UTIL_H_

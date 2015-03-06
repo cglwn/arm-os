@@ -176,14 +176,6 @@ int k_release_memory_block(void *p_mem_blk) {
 
 
 /* ----- Helper Functions ------ */
-void enableInterrupts( BOOLEAN nEnable )
-{
-	if( nEnable == true ) {
-		__enable_irq();
-	} else {
-		__disable_irq();
-	}
-}
 
 BOOLEAN isInHeap(U32* address) { 
 	MEM_BLOCK *tempBlock = mbHead;

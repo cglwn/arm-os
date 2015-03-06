@@ -2,6 +2,9 @@
 #include "k_memory.h"
 #include "assert.h"
 #include "printf.h"
+
+BOOLEAN interruptsEnabled = false; 
+
 PCB* dequeue( PCB* pcbQueue[], int priority ) 
 {
 	PCB* tempPCB = pcbQueue[priority];
@@ -107,9 +110,9 @@ BOOLEAN isInQueuePriority(PCB** pcbQueue, PCB* pcb) {
 	return inQueue;
 }
 
-void enqueue_message_queue( PCB* pcb, msg_header *msg ) {
-	msg_env *tail = pcb->next_msg;
-	if ( tail == null ) {
+void enqueue_message_queue( PCB* pcb, MSG_HEADER *msg ) {
+	MSG_HEADER *tail = pcb->next_msg;
+	if ( tail == NULL ) {
 		pcb->next_msg = msg;
 		return;
 	}
@@ -120,8 +123,8 @@ void enqueue_message_queue( PCB* pcb, msg_header *msg ) {
 	tail->next = msg;
 }
 
-msg_env* dequeue_message_queue( PCB* pcb ) {
-	msg_env msg_queue = pcb->next_msg;
+MSG_HEADER* dequeue_message_queue( PCB* pcb ) {
+	MSG_HEADER *msg_queue = pcb->next_msg;
 	if (msg_queue == NULL) {
 			return NULL; 
 	}
@@ -131,9 +134,13 @@ msg_env* dequeue_message_queue( PCB* pcb ) {
 
 void enableInterrupts( BOOLEAN nEnable )
 {
-	if( nEnable == true ) {
+	if( nEnable == true  && interruptsEnabled == false ) {
+		interruptsEnabled = true;
 		__enable_irq();
-	} else {
+	} 
+	
+	if ( nEnable == false  && interruptsEnabled == true) {
+		interruptsEnabled = false;
 		__disable_irq();
 	}
 }

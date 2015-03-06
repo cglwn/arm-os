@@ -17,7 +17,7 @@
 #include <system_LPC17xx.h>
 #include "uart_polling.h"
 #include "k_process.h"
-
+#include "k_memory.h"
 #include "k_utilities.h"
 
 #ifdef DEBUG_0
@@ -172,7 +172,6 @@ int process_switch(PCB *p_pcb_old)
 int k_release_processor(void)
 {
 	PCB *p_pcb_old = NULL;
-	int retCode;
 	
 	p_pcb_old = gp_current_process;
 	gp_current_process = scheduler();
@@ -261,36 +260,45 @@ int k_get_process_priority(int process_id){
 }
 
 int send_message(int process_id, void *message_envelope) {
+	MSG_HEADER *header;
 	__disable_irq();
-	msg_header *header = k_request_memory_block();
+	header = k_request_memory_block();
 	header->source_pid = (U32) gp_current_process->m_pid;
 	header->dest_pid = (U32) process_id;
-	header->msg_env = (msgbuf*) message_envelope;
+	header->msg_env = (MSGBUF*) message_envelope;
 	enqueue_message_queue(gp_current_process, header);
-	
 	if (gp_pcbs[process_id]->m_state ==  BLOCKED_ON_RECEIVE) {
-		gp_pcbs[process_id]->m_state = READY;
+		gp_pcbs[process_id]->m_state = RDY;
 		enqueuePriority(PCBReadyQueue, gp_pcbs[process_id]);
 	}
 	__enable_irq();
+	return RTX_OK; //TODO: check what this should return
 }
 
 void *receive_message(int *sender_id) {
-	msg_env *msg_envelope;
-	msgbuf *msg;
+	MSG_HEADER *msg_envelope;
+	MSGBUF *msg;
 	__disable_irq();
 	while(gp_current_process->next_msg == NULL) {
-		gp_current_process->state = BLOCKED_ON_RECEIVE;
+		gp_current_process->m_state = BLOCKED_ON_RECEIVE;
 		__enable_irq();
 		k_release_processor();
 	}
 	__disable_irq();
 	msg_envelope = dequeue_message_queue(gp_current_process);
-	msgbuf = msg_envelope->msg_env;
+	msg = msg_envelope->msg_env;
 	k_release_memory_block(msg_envelope);
 	__enable_irq();
-	return msgbuf;
+	return msg;
 }
+
+/*
+int delayed_send(int process_id, void *message_envelope, int delay) {
+	int time = 0;
+	while(time) {
+			send_message(process_id, message_envelope);
+	}
+}*/
 
 void null_proc(void) { 
 	while(1) {

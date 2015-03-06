@@ -25,6 +25,7 @@ void handle_process_ready(PCB* process);
 int k_set_process_priority(int process_id, int priority);
 int k_get_process_priority(int process_id);
 int send_message(int process_id, void *message_envelope);
+int delayed_send(int process_id, void *message_envelope, int delay);
 void null_proc(void);
 
 extern U32 *alloc_stack(U32 size_b);   /* allocate stack for a process */
