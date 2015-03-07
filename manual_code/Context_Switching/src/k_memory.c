@@ -142,9 +142,9 @@ void *k_request_memory_block(void) {
 }
 
 int k_release_memory_block(void *p_mem_blk) {
-	MEM_BLOCK *tempBlock;
-	MEM_BLOCK *tempNext = mbHead;
-	PCB* blockedPCB;
+	MEM_BLOCK *temp_block;
+	MEM_BLOCK *temp_next = mbHead;
+	PCB* blocked_pcb;
 #ifdef DEBUG_0 
 	printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
 #endif /* ! DEBUG_0 */
@@ -159,16 +159,16 @@ int k_release_memory_block(void *p_mem_blk) {
 	}
 	
 	//put freed memory block back in heap
-	tempBlock = p_mem_blk;
-	initializeMemBlock(tempBlock, p_mem_blk);
-	mbHead = tempBlock;
-	mbHead->mbNext = tempNext;
+	temp_block = p_mem_blk;
+	initializeMemBlock(temp_block, p_mem_blk);
+	mbHead = temp_block;
+	mbHead->mbNext = temp_next;
 	
 	//put blocked process in ready queue
-	blockedPCB = dequeuePriority(PCBBlockedQueue);
-	if(blockedPCB) {
-		blockedPCB->m_state = RDY;
-		handle_process_ready(blockedPCB);
+	blocked_pcb = dequeuePriority(PCBBlockedQueue);
+	if(blocked_pcb) {
+		blocked_pcb->m_state = RDY;
+		handle_process_ready(blocked_pcb);
 	}
 	enableInterrupts(true);
 	return RTX_OK;
@@ -178,19 +178,19 @@ int k_release_memory_block(void *p_mem_blk) {
 /* ----- Helper Functions ------ */
 
 BOOLEAN isInHeap(U32* address) { 
-	MEM_BLOCK *tempBlock = mbHead;
-	while(tempBlock != NULL) { 
-		if (tempBlock->uMemory == address) { 
+	MEM_BLOCK *temp_block = mbHead;
+	while(temp_block != NULL) { 
+		if (temp_block->uMemory == address) { 
 			return true;
 		}
-		tempBlock = tempBlock->mbNext;
+		temp_block = temp_block->mbNext;
 	}
 	return false;
 }
-void initializeMemBlock(MEM_BLOCK *mbBlock, U32* uMemory) {
+void initializeMemBlock(MEM_BLOCK *mb_block, U32* u_memory) {
 #ifdef DEBUG_0  
-	printf("%d\n", uMemory);
+	printf("%d\n", u_memory);
 #endif
-	mbBlock->mbNext = NULL;
-	mbBlock->uMemory = uMemory;
+	mb_block->mbNext = NULL;
+	mb_block->uMemory = uMemory;
 }
