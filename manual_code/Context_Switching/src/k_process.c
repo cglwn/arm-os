@@ -279,7 +279,7 @@ void *receive_message(int *sender_id) {
 	MSG_HEADER *msg_envelope;
 	MSGBUF *msg;
 	__disable_irq();
-	while(gp_current_process->next_msg == NULL) {
+	while(gp_current_process->msg_q == NULL) {
 		gp_current_process->m_state = BLOCKED_ON_RECEIVE;
 		__enable_irq();
 		k_release_processor();

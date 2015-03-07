@@ -111,9 +111,9 @@ BOOLEAN isInQueuePriority(PCB** pcbQueue, PCB* pcb) {
 }
 
 void enqueue_message_queue( PCB* pcb, MSG_HEADER *msg ) {
-	MSG_HEADER *tail = pcb->next_msg;
+	MSG_HEADER *tail = pcb->msg_q;
 	if ( tail == NULL ) {
-		pcb->next_msg = msg;
+		pcb->msg_q = msg;
 		return;
 	}
 	
@@ -124,11 +124,11 @@ void enqueue_message_queue( PCB* pcb, MSG_HEADER *msg ) {
 }
 
 MSG_HEADER* dequeue_message_queue( PCB* pcb ) {
-	MSG_HEADER *msg_queue = pcb->next_msg;
+	MSG_HEADER *msg_queue = pcb->msg_q;
 	if (msg_queue == NULL) {
 			return NULL; 
 	}
-	pcb->next_msg = msg_queue->next;
+	pcb->msg_q = msg_queue->next;
 	return msg_queue;
 }
 

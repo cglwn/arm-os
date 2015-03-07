@@ -49,7 +49,7 @@ typedef struct pcb
 	U32 m_pid;				/* process id */
 	U32 m_priority;  		/* initial priority */
 	PROC_STATE_E m_state;   /* state of the process */      
-	struct msg_header *next_msg; /*the message queue for this process*/
+	struct msg_header *msg_q; /*the message queue for this process*/
 } PCB;
 
 typedef struct msgbuf {
