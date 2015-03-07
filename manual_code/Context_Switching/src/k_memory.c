@@ -50,7 +50,7 @@ MEM_BLOCK *mbHead;
 void memory_init(void)
 {
 	U8 *p_end = (U8 *)&Image$$RW_IRAM1$$ZI$$Limit;
-	U32* blockStart;
+	U32* block_start;
 	int i;
 	int num_blocks = 1;
   
@@ -79,19 +79,19 @@ void memory_init(void)
   
 	/* allocate memory for heap, not implemented yet*/
 	start_of_heap = (U32*) p_end;
-	blockStart = (U32*) p_end;
-	if(blockStart < gp_stack) {
-		MEM_BLOCK *mbCurrent;
-		mbHead = (MEM_BLOCK *) blockStart;
-		mbCurrent = mbHead;
-		initializeMemBlock(mbCurrent, blockStart);
-		while(blockStart < gp_stack && (blockStart+HEAP_BLOCK_SIZE) < gp_stack && num_blocks < NUM_MEM_BLOCKS) {
+	block_start = (U32*) p_end;
+	if(block_start < gp_stack) {
+		MEM_BLOCK *mb_current;
+		mbHead = (MEM_BLOCK *) block_start;
+		mb_current = mbHead;
+		initializeMemBlock(mb_current, block_start);
+		while(block_start < gp_stack && (block_start+HEAP_BLOCK_SIZE) < gp_stack && num_blocks < NUM_MEM_BLOCKS) {
 			MEM_BLOCK *pBlock;
-			blockStart += HEAP_BLOCK_SIZE;
-			pBlock = (MEM_BLOCK *) blockStart;
-			initializeMemBlock( pBlock , blockStart);
-			mbCurrent->mbNext = pBlock;
-			mbCurrent = pBlock;
+			block_start += HEAP_BLOCK_SIZE;
+			pBlock = (MEM_BLOCK *) block_start;
+			initializeMemBlock( pBlock , block_start);
+			mb_current->mbNext = pBlock;
+			mb_current = pBlock;
 			num_blocks++;
 		}
 	}
