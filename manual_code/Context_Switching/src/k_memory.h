@@ -25,8 +25,8 @@ extern PCB **gp_pcbs;
 extern PCB *gp_current_process;
 
 typedef struct mem_block {
-	struct mem_block *mbNext;
-	U32 *uMemory;
+	struct mem_block *mb_next;
+	U32 *u_memory;
 }MEM_BLOCK;
 
 /* This symbol is defined in the scatter file (see RVCT Linker User Guide) */  
@@ -39,10 +39,9 @@ void memory_init(void);
 U32 *alloc_stack(U32 size_b);
 void *k_request_memory_block(void);
 int k_release_memory_block(void *);
-BOOLEAN isInHeap(U32* address);
+BOOLEAN is_in_heap(U32* address);
 
 /* ----- Helper Functions ------ */
-void enableInterrupts( BOOLEAN nEnable ); 
-void initializeMemBlock(MEM_BLOCK *mbBlock, U32* uMemory);
+void initialize_mem_block(MEM_BLOCK *mb_block, U32* u_memory);
 
 #endif /* ! K_MEM_H_ */
