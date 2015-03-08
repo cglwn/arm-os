@@ -261,7 +261,7 @@ int k_get_process_priority(int process_id){
 
 int send_message(int process_id, void *message_envelope) {
 	MSG_HEADER *header;
-	__disable_irq();
+	enable_interrupts(false);
 	header = k_request_memory_block();
 	header->source_pid = (U32) gp_current_process->m_pid;
 	header->dest_pid = (U32) process_id;
@@ -271,24 +271,24 @@ int send_message(int process_id, void *message_envelope) {
 		gp_pcbs[process_id]->m_state = RDY;
 		enqueuePriority(PCBReadyQueue, gp_pcbs[process_id]);
 	}
-	__enable_irq();
+	enable_interrupts(true);
 	return RTX_OK; //TODO: check what this should return
 }
 
 void *receive_message(int *sender_id) {
 	MSG_HEADER *msg_envelope;
 	MSGBUF *msg;
-	__disable_irq();
+	enable_interrupts(false);
 	while(gp_current_process->msg_q == NULL) {
 		gp_current_process->m_state = BLOCKED_ON_RECEIVE;
-		__enable_irq();
+		enable_interrupts(true);
 		k_release_processor();
 	}
-	__disable_irq();
+	enable_interrupts(false);
 	msg_envelope = dequeue_message_queue(gp_current_process);
 	msg = msg_envelope->msg_env;
 	k_release_memory_block(msg_envelope);
-	__enable_irq();
+	enable_interrupts(true);
 	return msg;
 }
 

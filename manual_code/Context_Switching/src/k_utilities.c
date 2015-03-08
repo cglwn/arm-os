@@ -3,7 +3,7 @@
 #include "assert.h"
 #include "printf.h"
 
-BOOLEAN interruptsEnabled = false; 
+BOOLEAN interruptsEnabled = true; 
 
 PCB* dequeue( PCB* pcbQueue[], int priority ) 
 {
@@ -132,7 +132,7 @@ MSG_HEADER* dequeue_message_queue( PCB* pcb ) {
 	return msg_queue;
 }
 
-void enableInterrupts( BOOLEAN nEnable )
+void enable_interrupts( BOOLEAN n_enable )
 {
 	if( nEnable == true  && interruptsEnabled == false ) {
 		interruptsEnabled = true;

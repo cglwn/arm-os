@@ -127,17 +127,17 @@ void *k_request_memory_block(void) {
 #ifdef DEBUG_0 
 	printf("k_request_memory_block: entering...\n");
 #endif /* ! DEBUG_0 */
-	enableInterrupts(false);
+	enable_interrupts(false);
 	while(!mb_head) {
 		gp_current_process->m_state = BLOCKED;
 		enqueuePriority(PCBBlockedQueue, gp_current_process);
-		enableInterrupts(true);
+		enable_interrupts(true);
 		k_release_processor();
 	}
-	enableInterrupts(false);
+	enable_interrupts(false);
 	temp_block = mb_head;
 	mb_head = mb_head->mb_next;
-	enableInterrupts(true);
+	enable_interrupts(true);
 	return temp_block->u_memory;
 }
 
@@ -148,7 +148,7 @@ int k_release_memory_block(void *p_mem_blk) {
 #ifdef DEBUG_0 
 	printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
 #endif /* ! DEBUG_0 */
-	enableInterrupts(false);
+	enable_interrupts(false);
 	
 	//error if memory is not aligned
 	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
@@ -170,7 +170,7 @@ int k_release_memory_block(void *p_mem_blk) {
 		blocked_pcb->m_state = RDY;
 		handle_process_ready(blocked_pcb);
 	}
-	enableInterrupts(true);
+	enable_interrupts(true);
 	return RTX_OK;
 }
 
