@@ -84,19 +84,19 @@ void memory_init(void)
 		MEM_BLOCK *mb_current;
 		mb_head = (MEM_BLOCK *) block_start;
 		mb_current = mb_head;
-		initializeMemBlock(mb_current, block_start);
+		initialize_mem_block(mb_current, block_start);
 		while(block_start < gp_stack && (block_start+HEAP_BLOCK_SIZE) < gp_stack && num_blocks < NUM_MEM_BLOCKS) {
 			MEM_BLOCK *pBlock;
 			block_start += HEAP_BLOCK_SIZE;
 			pBlock = (MEM_BLOCK *) block_start;
-			initializeMemBlock( pBlock , block_start);
-			mb_current->mbNext = pBlock;
+			initialize_mem_block( pBlock , block_start);
+			mb_current->mb_next = pBlock;
 			mb_current = pBlock;
 			num_blocks++;
 		}
 	}
 #ifdef DEBUG_0  
-	printf("mb_head = 0x%x \n", mb_head->uMemory);
+	printf("mb_head = 0x%x \n", mb_head->u_memory);
 #endif
 }
 
@@ -136,9 +136,9 @@ void *k_request_memory_block(void) {
 	}
 	enableInterrupts(false);
 	temp_block = mb_head;
-	mb_head = mb_head->mbNext;
+	mb_head = mb_head->mb_next;
 	enableInterrupts(true);
-	return temp_block->uMemory;
+	return temp_block->u_memory;
 }
 
 int k_release_memory_block(void *p_mem_blk) {
@@ -154,15 +154,15 @@ int k_release_memory_block(void *p_mem_blk) {
 	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
 			(U32*)p_mem_blk < gp_stack &&
 			(U32*)p_mem_blk >= start_of_heap) ||
-			isInHeap((U32*)p_mem_blk)){
+			is_in_heap((U32*)p_mem_blk)){
 		return RTX_ERR;
 	}
 	
 	//put freed memory block back in heap
 	temp_block = p_mem_blk;
-	initializeMemBlock(temp_block, p_mem_blk);
+	initialize_mem_block(temp_block, p_mem_blk);
 	mb_head = temp_block;
-	mb_head->mbNext = temp_next;
+	mb_head->mb_next = temp_next;
 	
 	//put blocked process in ready queue
 	blocked_pcb = dequeuePriority(PCBBlockedQueue);
@@ -177,20 +177,20 @@ int k_release_memory_block(void *p_mem_blk) {
 
 /* ----- Helper Functions ------ */
 
-BOOLEAN isInHeap(U32* address) { 
+BOOLEAN is_in_heap(U32* address) { 
 	MEM_BLOCK *temp_block = mb_head;
 	while(temp_block != NULL) { 
-		if (temp_block->uMemory == address) { 
+		if (temp_block->u_memory == address) { 
 			return true;
 		}
-		temp_block = temp_block->mbNext;
+		temp_block = temp_block->mb_next;
 	}
 	return false;
 }
-void initializeMemBlock(MEM_BLOCK *mb_block, U32* u_memory) {
+void initialize_mem_block(MEM_BLOCK *mb_block, U32* u_memory) {
 #ifdef DEBUG_0  
 	printf("%d\n", u_memory);
 #endif
-	mb_block->mbNext = NULL;
-	mb_block->uMemory = uMemory;
+	mb_block->mb_next = NULL;
+	mb_block->u_memory = u_memory;
 }
