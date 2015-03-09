@@ -155,6 +155,8 @@ int k_release_memory_block(void *p_mem_blk) {
 			(U32*)p_mem_blk < gp_stack &&
 			(U32*)p_mem_blk >= start_of_heap) ||
 			is_in_heap((U32*)p_mem_blk)){
+				
+		enable_interrupts(true);
 		return RTX_ERR;
 	}
 	

@@ -61,6 +61,7 @@ typedef struct msg_header {
 	struct msg_header *next;
 	U32 source_pid;
 	U32 dest_pid;
+	U32 expiry;
 	struct msgbuf *msg_env;
 }MSG_HEADER;
 

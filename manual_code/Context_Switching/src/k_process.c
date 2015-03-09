@@ -29,12 +29,14 @@
 PCB **gp_pcbs;                  /* array of pcbs */
 PCB *gp_current_process = NULL; /* always point to the current RUN process */
 
-PCB* PCBReadyQueue[5];
-PCB* PCBBlockedQueue[5];
+PCB *PCBReadyQueue[5];
+PCB *PCBBlockedQueue[5];
+MSG_HEADER *pending_delayed_messages = NULL;
 
 /* process initialization table */
 PROC_INIT g_proc_table[NUM_TEST_PROCS];
 extern PROC_INIT g_test_procs[NUM_TEST_PROCS];
+extern volatile uint32_t g_timer_count;
 
 /**
  * @biref: initialize all processes in the system
@@ -261,12 +263,17 @@ int k_get_process_priority(int process_id){
 
 int send_message(int process_id, void *message_envelope) {
 	MSG_HEADER *header;
+	PCB* dest_pcb;
+	dest_pcb = get_process(gp_pcbs, process_id);
 	enable_interrupts(false);
+	//initialize and set header
 	header = k_request_memory_block();
 	header->source_pid = (U32) gp_current_process->m_pid;
 	header->dest_pid = (U32) process_id;
 	header->msg_env = (MSGBUF*) message_envelope;
-	enqueue_message_queue(gp_current_process, header);
+	
+	//put message in the message queue
+	enqueue_message_queue(dest_pcb, header);
 	if (gp_pcbs[process_id]->m_state ==  BLOCKED_ON_RECEIVE) {
 		gp_pcbs[process_id]->m_state = RDY;
 		enqueuePriority(PCBReadyQueue, gp_pcbs[process_id]);
@@ -292,13 +299,17 @@ void *receive_message(int *sender_id) {
 	return msg;
 }
 
-/*
+
 int delayed_send(int process_id, void *message_envelope, int delay) {
-	int time = 0;
-	while(time) {
-			send_message(process_id, message_envelope);
-	}
-}*/
+	MSG_HEADER *header;
+	header = k_request_memory_block();
+	header->source_pid = (U32) gp_current_process->m_pid;
+	header->dest_pid = (U32) process_id;
+	header->msg_env = (MSGBUF*) message_envelope;
+	header->expiry = g_timer_count + delay;
+	enqueue_pending_queue(pending_delayed_messages, message_envelope);
+	return RTX_OK;
+}
 
 void null_proc(void) { 
 	while(1) {

@@ -110,7 +110,7 @@ BOOLEAN isInQueuePriority(PCB** pcbQueue, PCB* pcb) {
 	return inQueue;
 }
 
-void enqueue_message_queue( PCB* pcb, MSG_HEADER *msg ) {
+void enqueue_message_queue(PCB* pcb, MSG_HEADER *msg) {
 	MSG_HEADER *tail = pcb->msg_q;
 	if ( tail == NULL ) {
 		pcb->msg_q = msg;
@@ -123,7 +123,7 @@ void enqueue_message_queue( PCB* pcb, MSG_HEADER *msg ) {
 	tail->next = msg;
 }
 
-MSG_HEADER* dequeue_message_queue( PCB* pcb ) {
+MSG_HEADER* dequeue_message_queue(PCB* pcb ) {
 	MSG_HEADER *msg_queue = pcb->msg_q;
 	if (msg_queue == NULL) {
 			return NULL; 
@@ -132,15 +132,64 @@ MSG_HEADER* dequeue_message_queue( PCB* pcb ) {
 	return msg_queue;
 }
 
+void enqueue_pending_queue(MSG_HEADER *queue, MSG_HEADER *msg) {
+	if(queue == NULL) {
+		queue = msg;
+	} else {
+		while (queue->next != NULL) {
+			queue = queue->next;
+		}
+		queue->next = msg;
+	}
+}
+
+void enqueue_timeout_queue(MSG_HEADER *queue, MSG_HEADER *msg) {
+	if(queue == NULL) {
+		queue = msg;
+	} else {
+		MSG_HEADER *next_msg = queue->next;
+		while (next_msg != NULL && next_msg->expiry < msg->expiry) {
+			queue = queue->next;
+			next_msg = next_msg->next;
+		}
+		queue->next = msg;
+		msg->next = next_msg;
+	}
+}
+
+MSG_HEADER* dequeue_pending_queue(MSG_HEADER *queue) {
+	MSG_HEADER *head = queue;
+	if (queue != NULL && queue->next != NULL) {
+		queue = queue->next;
+	}
+	return head;
+}
+
 void enable_interrupts( BOOLEAN n_enable )
 {
-	if( nEnable == true  && interruptsEnabled == false ) {
+	if( n_enable == true  && interruptsEnabled == false ) {
+#ifdef DEBUG_0
+			printf("Enabling interrupts\n");
+#endif // DEBUG_0
 		interruptsEnabled = true;
 		__enable_irq();
 	} 
 	
-	if ( nEnable == false  && interruptsEnabled == true) {
+	if ( n_enable == false  && interruptsEnabled == true) {
+#ifdef DEBUG_0
+			printf("Disabling interrupts\n");
+#endif // DEBUG_0
 		interruptsEnabled = false;
 		__disable_irq();
 	}
+}
+
+PCB* get_process(PCB **pcbs, int pid) { 
+	int i;
+	for( i = 0; i < NUM_TEST_PROCS; i++ ) {
+		if(pcbs[i]->m_pid == pid) {
+			return pcbs[i];
+		}
+	}
+	return NULL;
 }
