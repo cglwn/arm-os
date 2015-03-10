@@ -67,6 +67,8 @@ void process_init()
 		(gp_pcbs[i])->m_state = NEW;
 		(gp_pcbs[i])->m_priority = (g_proc_table[i]).m_priority;
 		(gp_pcbs[i])->mp_next = NULL;
+		(gp_pcbs[i])->msg_q = NULL;
+
 		sp = alloc_stack((g_proc_table[i]).m_stack_size);
 		*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 		*(--sp)  = (U32)((g_proc_table[i]).mpf_start_pc); // PC contains the entry point of the process
@@ -82,6 +84,8 @@ void process_init()
 		(gp_pcbs[NUM_TEST_PROCS])->m_state = NEW;
 		(gp_pcbs[NUM_TEST_PROCS])->m_priority = NUM_PRIORITIES - 1;
 		(gp_pcbs[NUM_TEST_PROCS])->mp_next = NULL;
+		//(gp_pcbs[NUM_TEST_PROCS])->msg_q = NULL;
+
 		sp = alloc_stack(0x100);
 		*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 		*(--sp)  = (U32)(&null_proc); // PC contains the entry point of the process
@@ -102,7 +106,7 @@ void process_init()
 PCB *scheduler(void)
 {
 	int highestPriority = peekPriority(PCBReadyQueue);
-	if (gp_current_process != NULL && highestPriority > gp_current_process->m_priority && gp_current_process->m_state != BLOCKED) { 
+	if (gp_current_process != NULL && highestPriority > gp_current_process->m_priority && gp_current_process->m_state != BLOCKED && gp_current_process->m_state!=BLOCKED_ON_RECEIVE) { 
 		return gp_current_process;
 	} else {
 		gp_current_process = dequeuePriority(PCBReadyQueue);
@@ -128,11 +132,11 @@ int process_switch(PCB *p_pcb_old)
 	old_state = p_pcb_old->m_state;
 	if (state == NEW) {
 		if (gp_current_process != p_pcb_old && p_pcb_old->m_state != NEW) {
-			if (old_state != BLOCKED) {
+			if (old_state != BLOCKED && old_state != BLOCKED_ON_RECEIVE) {
 				p_pcb_old->m_state = RDY;
 			}
 			p_pcb_old->mp_sp = (U32 *) __get_MSP();
-			if( ! isInQueuePriority(PCBBlockedQueue, p_pcb_old) && !isInQueuePriority(PCBReadyQueue, p_pcb_old)) {
+			if( ! isInQueuePriority(PCBBlockedQueue, p_pcb_old) && !isInQueuePriority(PCBReadyQueue, p_pcb_old) && p_pcb_old->m_state != BLOCKED_ON_RECEIVE) {
 				enqueuePriority( PCBReadyQueue, p_pcb_old );
 			}
 		}
@@ -145,7 +149,7 @@ int process_switch(PCB *p_pcb_old)
 
 	if (gp_current_process != p_pcb_old) {
 		if (state == RDY){ 		
-			if (old_state != BLOCKED) {
+			if (old_state != BLOCKED && old_state != BLOCKED_ON_RECEIVE) {
 				p_pcb_old->m_state = RDY;
 			}
 			p_pcb_old->mp_sp = (U32 *) __get_MSP(); // save the old process's sp
@@ -261,7 +265,7 @@ int k_get_process_priority(int process_id){
 	return RTX_ERR;
 }
 
-int send_message(int process_id, void *message_envelope) {
+int k_send_message(int process_id, void *message_envelope) {
 	MSG_HEADER *header;
 	PCB* dest_pcb;
 	dest_pcb = get_process(gp_pcbs, process_id);
@@ -274,15 +278,19 @@ int send_message(int process_id, void *message_envelope) {
 	
 	//put message in the message queue
 	enqueue_message_queue(dest_pcb, header);
-	if (gp_pcbs[process_id]->m_state ==  BLOCKED_ON_RECEIVE) {
-		gp_pcbs[process_id]->m_state = RDY;
-		enqueuePriority(PCBReadyQueue, gp_pcbs[process_id]);
+	if (dest_pcb->m_state ==  BLOCKED_ON_RECEIVE) {
+		dest_pcb->m_state = RDY;
+		enqueuePriority(PCBReadyQueue, dest_pcb);
+		if (dest_pcb->m_priority < gp_current_process->m_priority) {
+			enable_interrupts(true);
+			k_release_processor();
+		}
 	}
 	enable_interrupts(true);
 	return RTX_OK; //TODO: check what this should return
 }
 
-void *receive_message(int *sender_id) {
+void *k_receive_message(int *sender_id) {
 	MSG_HEADER *msg_envelope;
 	MSGBUF *msg;
 	enable_interrupts(false);
@@ -300,14 +308,18 @@ void *receive_message(int *sender_id) {
 }
 
 
-int delayed_send(int process_id, void *message_envelope, int delay) {
+int k_delayed_send(int process_id, void *message_envelope, int delay) {
 	MSG_HEADER *header;
+#ifdef DEBUG_0
+	printf("Call Time: %d", g_timer_count);
+#endif
 	header = k_request_memory_block();
 	header->source_pid = (U32) gp_current_process->m_pid;
 	header->dest_pid = (U32) process_id;
 	header->msg_env = (MSGBUF*) message_envelope;
 	header->expiry = g_timer_count + delay;
-	enqueue_pending_queue(pending_delayed_messages, message_envelope);
+	header->next = NULL;
+	enqueue_pending_queue(header);
 	return RTX_OK;
 }
 

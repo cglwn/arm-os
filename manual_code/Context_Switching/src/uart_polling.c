@@ -44,6 +44,7 @@ int uart_init(int n_uart) {
     LPC_PINCON->PINSEL0 |= (1 << 6);    /* Pin P0.3 used as RXD0 (Com0) */
 
     pUart = (LPC_UART_TypeDef *) LPC_UART0;
+		
     
   } else if (n_uart == 1) {
     LPC_PINCON->PINSEL4 |= (2 << 0);    /* Pin P2.0 used as TXD1 (Com1) */
@@ -66,7 +67,7 @@ int uart_init(int n_uart) {
   pUart->FDR = 0x21;        /* FR = 1.507 ~ 1/2, DivAddVal = 1, MulVal = 2  */
                             /* FR = 1.507 = 25MHZ/(16*9*115200)             */
   pUart->LCR &= ~(BIT(7));  /* disable the Divisior Latch Access Bit DLAB=0 */
-
+	NVIC_EnableIRQ(UART0_IRQn);
   return 0;
 }
 

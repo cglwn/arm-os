@@ -4,6 +4,8 @@
 #include "printf.h"
 
 BOOLEAN interruptsEnabled = true; 
+extern MSG_HEADER *pending_delayed_messages;
+extern MSG_HEADER *timeout_queue;
 
 PCB* dequeue( PCB* pcbQueue[], int priority ) 
 {
@@ -132,35 +134,50 @@ MSG_HEADER* dequeue_message_queue(PCB* pcb ) {
 	return msg_queue;
 }
 
-void enqueue_pending_queue(MSG_HEADER *queue, MSG_HEADER *msg) {
-	if(queue == NULL) {
-		queue = msg;
+void enqueue_pending_queue(MSG_HEADER *msg) {
+	if(pending_delayed_messages == NULL) {
+		pending_delayed_messages = msg;
 	} else {
-		while (queue->next != NULL) {
-			queue = queue->next;
+		while (pending_delayed_messages->next != NULL) {
+			pending_delayed_messages = pending_delayed_messages->next;
 		}
-		queue->next = msg;
+		pending_delayed_messages->next = msg;
 	}
 }
 
-void enqueue_timeout_queue(MSG_HEADER *queue, MSG_HEADER *msg) {
-	if(queue == NULL) {
-		queue = msg;
+void enqueue_timeout_queue(MSG_HEADER *msg) {
+	MSG_HEADER *current = timeout_queue;
+	if(timeout_queue == NULL) {
+		timeout_queue = msg;
 	} else {
-		MSG_HEADER *next_msg = queue->next;
+		MSG_HEADER *next_msg = timeout_queue->next;
 		while (next_msg != NULL && next_msg->expiry < msg->expiry) {
-			queue = queue->next;
+			current = current->next;
 			next_msg = next_msg->next;
 		}
-		queue->next = msg;
+		current->next = msg;
 		msg->next = next_msg;
 	}
 }
 
-MSG_HEADER* dequeue_pending_queue(MSG_HEADER *queue) {
-	MSG_HEADER *head = queue;
-	if (queue != NULL && queue->next != NULL) {
-		queue = queue->next;
+MSG_HEADER* dequeue_pending_queue() {
+	MSG_HEADER *head = pending_delayed_messages;
+	if (pending_delayed_messages != NULL) {
+		pending_delayed_messages = head->next;
+	}
+	if( head ) {
+		head->next = NULL;
+	}
+	return head;
+}
+
+MSG_HEADER* dequeue_timeout_queue() {
+	MSG_HEADER *head = timeout_queue;
+	if (timeout_queue != NULL) {
+		timeout_queue = head->next;
+	}
+	if( head ) {
+		head->next = NULL;
 	}
 	return head;
 }
@@ -169,7 +186,7 @@ void enable_interrupts( BOOLEAN n_enable )
 {
 	if( n_enable == true  && interruptsEnabled == false ) {
 #ifdef DEBUG_0
-			printf("Enabling interrupts\n");
+			//printf("Enabling interrupts\n");
 #endif // DEBUG_0
 		interruptsEnabled = true;
 		__enable_irq();
@@ -177,7 +194,7 @@ void enable_interrupts( BOOLEAN n_enable )
 	
 	if ( n_enable == false  && interruptsEnabled == true) {
 #ifdef DEBUG_0
-			printf("Disabling interrupts\n");
+			//printf("Disabling interrupts\n");
 #endif // DEBUG_0
 		interruptsEnabled = false;
 		__disable_irq();

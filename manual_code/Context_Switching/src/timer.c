@@ -12,7 +12,13 @@
 #include "k_process.h"
 #include "k_rtx.h"
 #include "k_memory.h"
-#define BIT(X) (1<<X)
+#include "uart_def.h"
+#include "uart_polling.h"
+
+#ifdef DEBUG_0
+#include "printf.h"
+#endif //DEBUG_0
+
 
 volatile uint32_t g_timer_count = 0; // increment every 1 ms
 extern MSG_HEADER *pending_delayed_messages;
@@ -116,23 +122,31 @@ __asm void TIMER0_IRQHandler(void)
  */
 void c_TIMER0_IRQHandler(void)
 {
-	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	MSG_HEADER *pending_message;
-	pending_message = dequeue_pending_queue(pending_delayed_messages);
+#ifdef DEBUG_0
+	//if (g_timer_count % 10 == 0) {
+		//printf("\nTIMER: %d\n", g_timer_count);
+	//}
+#endif
+	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
+	pending_message = dequeue_pending_queue();
 	while(pending_message != NULL) {
 		//enqueue into prioirity timeout queue
-		enqueue_timeout_queue(timeout_queue, pending_message);
-		pending_message = dequeue_pending_queue(pending_delayed_messages);
+		enqueue_timeout_queue(pending_message);
+		pending_message = dequeue_pending_queue();
 	}
 	while (timeout_queue != NULL && timeout_queue->expiry > g_timer_count) {
 		int target_pid;
 		MSGBUF *msg_env;
 		MSG_HEADER *expired_message;
-		expired_message = dequeue_pending_queue(timeout_queue);
+		expired_message = dequeue_timeout_queue();
 		target_pid = expired_message->dest_pid;
 		msg_env = expired_message->msg_env;
 		k_release_memory_block(expired_message);
-		send_message(target_pid, msg_env);
+#ifdef DEBUG_0
+	printf("Send Time: %d", g_timer_count);
+#endif
+		k_send_message(target_pid, msg_env);
 	}
 	LPC_TIM0->IR = BIT(0);  
 	g_timer_count++;

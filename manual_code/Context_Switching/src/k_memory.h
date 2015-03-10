@@ -16,7 +16,7 @@
 #define HEAP_BLOCK_SIZE 0x100
 #endif //HEAP_BLOCK_SIZE
 #ifndef NUM_MEM_BLOCKS
-#define NUM_MEM_BLOCKS 0x2
+#define NUM_MEM_BLOCKS 0x8
 #endif //NUM_MEM_BLOCKS
 /* ----- Types ----- */
 
