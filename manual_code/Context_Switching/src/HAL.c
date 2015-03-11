@@ -5,12 +5,13 @@
  *       The code borrowed some ideas from ARM RL-RTX source code
  */
  
+ 
 /* pop off exception stack frame from the stack */
 __asm void __rte(void)
 {
   PRESERVE8            ; 8 bytes alignement of the stack
   MVN  LR, #:NOT:0xFFFFFFF9  ; set EXC_RETURN value, Thread mode, MSP
-  BX   LR
+	BX   LR
 }
 
 /* NOTE: assuming MSP is used. Ideally, PSP should be used */

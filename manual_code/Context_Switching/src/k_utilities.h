@@ -2,7 +2,7 @@
 #define K_UTIL_H_
 
 #include "k_rtx.h"
-
+#include "message.h"
 /* ----- Functions ----- */
 
 //PCB* dequeue( PCB* pcbQueue );

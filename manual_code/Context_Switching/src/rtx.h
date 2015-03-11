@@ -52,11 +52,6 @@ typedef struct proc_init
 } PROC_INIT;
 
 /* message buffer */
-typedef struct msgbuf
-{
-	int mtype;              /* user defined message type */
-	char mtext[1];          /* body of the message */
-} MSG_BUF;
 
 /* ----- RTX User API ----- */
 #define __SVC_0  __svc_indirect(0)

@@ -32,7 +32,7 @@
 
 #define DEFAULT 0
 #define KCD_REG 1
-/*----- Types -----*/
+ /*----- Types -----*/
 typedef unsigned char U8;
 typedef unsigned int U32;
 
@@ -53,19 +53,6 @@ typedef struct pcb
 	PROC_STATE_E m_state;   /* state of the process */      
 	struct msg_header *msg_q; /*the message queue for this process*/
 } PCB;
-
-typedef struct msgbuf {
-	int mtype; /* user defined message type */
-	char mtext[1]; /* body of the message */
-} MSGBUF;
-
-typedef struct msg_header {
-	struct msg_header *next;
-	U32 source_pid;
-	U32 dest_pid;
-	U32 expiry;
-	struct msgbuf *msg_env;
-}MSG_HEADER;
 
 /* initialization table item */
 typedef struct proc_init

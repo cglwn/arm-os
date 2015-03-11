@@ -12,6 +12,7 @@
 #include "k_utilities.h"
 #include "k_memory.h"
 #include "k_process.h"
+#include "message.h"
 
 #ifdef DEBUG_0
 #include "printf.h"
@@ -187,7 +188,7 @@ RESTORE
  */
 void c_UART0_IRQHandler(void)
 {
-	MSGBUF *msg = NULL;
+	MSG_BUF *msg = NULL;
 	MSG_HEADER *header = NULL;
 	/*
 	LPC_UART_TypeDef *pUart = (LPC_UART_TypeDef *) LPC_UART0;
@@ -241,7 +242,7 @@ void c_UART0_IRQHandler(void)
 		uart1_put_char(g_char_in);
 		uart1_put_string("\n\r");
 #endif // DEBUG_0
-		msg = (MSGBUF *)k_request_memory_block();
+		msg = (MSG_BUF *)k_request_memory_block();
 		msg->mtext[0] = g_char_in;
 		g_buffer[12] = g_char_in; // nasty hack
 		g_send_char = 1;

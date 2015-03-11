@@ -153,7 +153,7 @@ void c_TIMER0_IRQHandler(void)
 	}
 	while (timeout_queue != NULL && timeout_queue->expiry > g_timer_count) {
 		int target_pid;
-		MSGBUF *msg_env;
+		MSG_BUF *msg_env;
 		MSG_HEADER *expired_message;
 		expired_message = dequeue_timeout_queue();
 		target_pid = expired_message->dest_pid;
