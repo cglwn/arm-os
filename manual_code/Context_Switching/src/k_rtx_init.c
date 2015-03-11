@@ -11,6 +11,8 @@
 #include "uart.h"
 #include "timer.h"
 
+#include "uart.h"
+#include "LPC17xx.h"
 void k_rtx_init(void)
 {
         __disable_irq();

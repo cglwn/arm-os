@@ -27,6 +27,7 @@ int k_get_process_priority(int process_id);
 int k_send_message(int process_id, void *message_envelope);
 int k_delayed_send(int process_id, void *message_envelope, int delay);
 void *k_receive_message(int *sender_id);
+void *nb_receive_message(int *sender_id);
 void null_proc(void);
 
 extern U32 *alloc_stack(U32 size_b);   /* allocate stack for a process */

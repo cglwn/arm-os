@@ -19,6 +19,8 @@ void enable_interrupts( BOOLEAN n_enable );
 PCB* get_process(PCB **pcb, int pid);
 void enqueue_pending_queue(MSG_HEADER *msg);
 void enqueue_timeout_queue(MSG_HEADER *msg);
-MSG_HEADER* dequeue_pending_queue();
-MSG_HEADER* dequeue_timeout_queue();
+void enqueue_crt_queue(MSG_HEADER *msg);
+MSG_HEADER* dequeue_pending_queue(void);
+MSG_HEADER* dequeue_crt_queue(void);
+MSG_HEADER* dequeue_timeout_queue(void);
 #endif // K_UTIL_H_

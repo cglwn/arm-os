@@ -6,6 +6,7 @@
 BOOLEAN interruptsEnabled = true; 
 extern MSG_HEADER *pending_delayed_messages;
 extern MSG_HEADER *timeout_queue;
+extern MSG_HEADER *pending_crt_messages;
 
 PCB* dequeue( PCB* pcbQueue[], int priority ) 
 {
@@ -160,6 +161,28 @@ void enqueue_timeout_queue(MSG_HEADER *msg) {
 	}
 }
 
+void enqueue_crt_queue(MSG_HEADER *msg) {
+	if(pending_crt_messages == NULL) {
+		pending_crt_messages = msg;
+	} else {
+		while (pending_crt_messages->next != NULL) {
+			pending_crt_messages = pending_crt_messages->next;
+		}
+		pending_crt_messages->next = msg;
+	}
+}
+
+MSG_HEADER* dequeue_crt_queue() {
+	MSG_HEADER *head = pending_crt_messages;
+	if (pending_crt_messages != NULL) {
+		pending_crt_messages = head->next;
+	}
+	if( head ) {
+		head->next = NULL;
+	}
+	return head;
+}
+
 MSG_HEADER* dequeue_pending_queue() {
 	MSG_HEADER *head = pending_delayed_messages;
 	if (pending_delayed_messages != NULL) {
@@ -203,7 +226,7 @@ void enable_interrupts( BOOLEAN n_enable )
 
 PCB* get_process(PCB **pcbs, int pid) { 
 	int i;
-	for( i = 0; i < NUM_TEST_PROCS; i++ ) {
+	for( i = 0; i < 8/*NUM_TOTAL_PROCS*/; i++ ) {
 		if(pcbs[i]->m_pid == pid) {
 			return pcbs[i];
 		}

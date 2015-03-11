@@ -32,11 +32,14 @@ PCB *gp_current_process = NULL; /* always point to the current RUN process */
 PCB *PCBReadyQueue[5];
 PCB *PCBBlockedQueue[5];
 MSG_HEADER *pending_delayed_messages = NULL;
+MSG_HEADER *pending_crt_messages = NULL;
 
 /* process initialization table */
 PROC_INIT g_proc_table[NUM_TEST_PROCS];
 extern PROC_INIT g_test_procs[NUM_TEST_PROCS];
 extern volatile uint32_t g_timer_count;
+
+void crt_proc(void);
 
 /**
  * @biref: initialize all processes in the system
@@ -51,7 +54,7 @@ void process_init()
 		PCBReadyQueue[i] = NULL;
 		PCBBlockedQueue[i] = NULL;
 	}
-        /* fill out the initialization table */
+       /* fill out the initialization table */
 	set_test_procs();
 	for ( i = 0; i < NUM_TEST_PROCS; i++ ) {
 		g_proc_table[i].m_pid = g_test_procs[i].m_pid;
@@ -85,7 +88,7 @@ void process_init()
 		(gp_pcbs[NUM_TEST_PROCS])->m_priority = NUM_PRIORITIES - 1;
 		(gp_pcbs[NUM_TEST_PROCS])->mp_next = NULL;
 		//(gp_pcbs[NUM_TEST_PROCS])->msg_q = NULL;
-
+	
 		sp = alloc_stack(0x100);
 		*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 		*(--sp)  = (U32)(&null_proc); // PC contains the entry point of the process
@@ -94,6 +97,23 @@ void process_init()
 		}
 		(gp_pcbs[NUM_TEST_PROCS])->mp_sp = sp;
 		enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS]);
+	
+		/*Initialize CRT process*/
+		(gp_pcbs[NUM_TEST_PROCS+1])->m_pid = PID_CRT;
+		(gp_pcbs[NUM_TEST_PROCS+1])->m_state = NEW;
+		(gp_pcbs[NUM_TEST_PROCS+1])->m_priority = 0;
+		(gp_pcbs[NUM_TEST_PROCS+1])->mp_next = NULL;
+		(gp_pcbs[NUM_TEST_PROCS+1])->msg_q = NULL;
+		
+		sp = alloc_stack(0x100);
+		*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+		*(--sp)  = (U32)(&crt_proc); // PC contains the entry point of the process
+		for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+			*(--sp) = 0x0;
+		}
+		(gp_pcbs[NUM_TEST_PROCS+1])->mp_sp = sp;
+		enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+1]);
+		
 }
 
 /*@brief: scheduler, pick the pid of the next to run process
@@ -153,7 +173,7 @@ int process_switch(PCB *p_pcb_old)
 				p_pcb_old->m_state = RDY;
 			}
 			p_pcb_old->mp_sp = (U32 *) __get_MSP(); // save the old process's sp
-			if( ! isInQueuePriority(PCBBlockedQueue, p_pcb_old) && !isInQueuePriority(PCBReadyQueue, p_pcb_old)) {
+			if( ! isInQueuePriority(PCBBlockedQueue, p_pcb_old) && !isInQueuePriority(PCBReadyQueue, p_pcb_old) && old_state != BLOCKED_ON_RECEIVE) {
 				enqueuePriority( PCBReadyQueue, p_pcb_old );
 			}
 			gp_current_process->m_state = RUN;
@@ -210,7 +230,7 @@ int k_set_process_priority(int process_id, int priority){
 		return RTX_ERR;
 	}
 	
-	for(i = 0; i < NUM_TEST_PROCS; i++) {
+	for(i = 0; i < 8 /*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			// retCode = 0 for Ready ; 1 for Blocked ; -1 for fail
 			if (isInQueuePriority(PCBReadyQueue, gp_pcbs[i])) {
@@ -228,19 +248,19 @@ int k_set_process_priority(int process_id, int priority){
 				if ( gp_pcbs[i]->m_state != NEW) {
 					gp_pcbs[i]->m_state = RDY;
 				}
-				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i]) {
+				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i] && gp_pcbs[i]->m_state != BLOCKED_ON_RECEIVE) {
 					enqueuePriority( PCBReadyQueue, gp_pcbs[i] );
 				}
 			} else if ( queueCode == 1 ) {
 				gp_pcbs[i]->m_state = BLOCKED;
-				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i]) {
+				if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_current_process != gp_pcbs[i] && gp_pcbs[i]->m_state != BLOCKED_ON_RECEIVE) {
 					enqueuePriority( PCBBlockedQueue, gp_pcbs[i] );
 				}
 			} else if (gp_pcbs[i] == gp_current_process) { 
-				if ( gp_pcbs[i]->m_state != NEW) {
+				if ( gp_pcbs[i]->m_state != NEW && gp_pcbs[i]->m_state != BLOCKED_ON_RECEIVE) {
 					gp_pcbs[i]->m_state = RDY;
 				}
-					if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i])) {
+					if( ! isInQueuePriority(PCBBlockedQueue, gp_pcbs[i]) && !isInQueuePriority(PCBReadyQueue, gp_pcbs[i]) && gp_pcbs[i]->m_state != BLOCKED_ON_RECEIVE) {
 						enqueuePriority( PCBReadyQueue, gp_pcbs[i] );
 					}
 			}	else {
@@ -257,7 +277,7 @@ int k_set_process_priority(int process_id, int priority){
 
 int k_get_process_priority(int process_id){
 	int i;
-	for(i = 0; i < NUM_TEST_PROCS; i++) {
+	for(i = 0; i < 8/*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			return gp_pcbs[i]->m_priority;
 		}
@@ -268,13 +288,17 @@ int k_get_process_priority(int process_id){
 int k_send_message(int process_id, void *message_envelope) {
 	MSG_HEADER *header;
 	PCB* dest_pcb;
+#ifdef DEBUG_0
+	printf("Process_Id: %d\nMessage Envelope: %d", process_id, (int)message_envelope); 
+#endif /*DEBUG_0*/
 	dest_pcb = get_process(gp_pcbs, process_id);
 	enable_interrupts(false);
 	//initialize and set header
-	header = k_request_memory_block();
+	header = (MSG_HEADER *)k_request_memory_block();
 	header->source_pid = (U32) gp_current_process->m_pid;
 	header->dest_pid = (U32) process_id;
 	header->msg_env = (MSGBUF*) message_envelope;
+	header->next=NULL;
 	
 	//put message in the message queue
 	enqueue_message_queue(dest_pcb, header);
@@ -307,13 +331,25 @@ void *k_receive_message(int *sender_id) {
 	return msg;
 }
 
+void *nb_receive_message(int *sender_id) {
+	MSG_HEADER *msg_envelope;
+	MSGBUF *msg = NULL;
+	enable_interrupts(false);
+	msg_envelope = dequeue_message_queue(gp_current_process);
+	if (msg_envelope ){ 
+		msg = msg_envelope->msg_env;
+		k_release_memory_block(msg_envelope);
+	}
+	enable_interrupts(true);
+	return msg;
+}
 
 int k_delayed_send(int process_id, void *message_envelope, int delay) {
 	MSG_HEADER *header;
 #ifdef DEBUG_0
 	printf("Call Time: %d", g_timer_count);
 #endif
-	header = k_request_memory_block();
+	header = (MSG_HEADER *)k_request_memory_block();
 	header->source_pid = (U32) gp_current_process->m_pid;
 	header->dest_pid = (U32) process_id;
 	header->msg_env = (MSGBUF*) message_envelope;
@@ -321,6 +357,23 @@ int k_delayed_send(int process_id, void *message_envelope, int delay) {
 	header->next = NULL;
 	enqueue_pending_queue(header);
 	return RTX_OK;
+}
+
+/*
+void kcd_proc(void) {
+	MSG_BUF *msg = k_receive_message(NULL);
+	
+}
+*/
+void crt_proc(void) {
+	while(1) {
+		MSGBUF *msg = k_receive_message(NULL);
+		MSG_HEADER* header;	
+		header = (MSG_HEADER *)k_request_memory_block();
+		header->msg_env = msg;
+		header->next = NULL;
+		enqueue_crt_queue(header);
+	}
 }
 
 void null_proc(void) { 

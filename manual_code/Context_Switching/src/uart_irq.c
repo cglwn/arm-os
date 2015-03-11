@@ -8,6 +8,11 @@
 #include <LPC17xx.h>
 #include "uart.h"
 #include "uart_polling.h"
+#include "k_rtx.h"
+#include "k_utilities.h"
+#include "k_memory.h"
+#include "k_process.h"
+
 #ifdef DEBUG_0
 #include "printf.h"
 #endif
@@ -20,6 +25,7 @@ uint8_t g_char_in;
 uint8_t g_char_out;
 uint32_t g_switch_flag = 0;
 
+extern MSG_HEADER *pending_crt_messages;
 extern int k_release_processor(void);
 /**
  * @brief: initialize the n_uart
@@ -137,7 +143,7 @@ int uart_irq_init(int n_uart) {
 	pUart->LCR &= ~(BIT(7)); 
 	
 	//pUart->IER = IER_RBR | IER_THRE | IER_RLS; 
-	pUart->IER = IER_RBR;
+	pUart->IER = IER_RBR| IER_THRE;
 
 	/* Step 6b: enable the UART interrupt from the system level */
 	
@@ -181,13 +187,93 @@ RESTORE
  */
 void c_UART0_IRQHandler(void)
 {
+	MSGBUF *msg = NULL;
+	MSG_HEADER *header = NULL;
+	/*
 	LPC_UART_TypeDef *pUart = (LPC_UART_TypeDef *) LPC_UART0;
+	MSG_HEADER *header = NULL;
+	MSGBUF *msg = NULL;
+	
+	if (!(pUart->LSR & LSR_THRE)) {
+		header = dequeue_crt_queue();
+		if( header ) {
+			msg = header->msg_env;
+			if( msg ) {
+				pUart->THR = msg->mtext[0];
+				k_release_memory_block(msg);
+			}
+			k_release_memory_block(header);
+		}
+	}
+
 #ifdef DEBUG_0
 	//if (pUart->LSR & 0x01) {
 		//printf("%c\n", pUart->RBR);
 	//}
+#endif /*DEBUG_0
 	//printf("Hello");
-	printf("%c\n", pUart->RBR);
-#endif /*DEBUG_0*/
+	
+	if(pUart->LSR & LSR_RDR) {
+		MSGBUF *msg = (MSGBUF *)k_request_memory_block();
+		msg->mtext[0] = pUart->RBR;
+		k_send_message(PID_CRT, msg);
+		k_set_process_priority(PID_CRT, 0);
+	} else if(pUart->LSR & LSR_THRE) {
+		while(!pUart->LSR & LSR_THRE);
+		pUart->THR = pUart->RBR;
+	}
+	*/
+	
+		uint8_t IIR_IntId;	    // Interrupt ID from IIR 		 
+	LPC_UART_TypeDef *pUart = (LPC_UART_TypeDef *)LPC_UART0;
+	
+#ifdef DEBUG_0
+	uart1_put_string("Entering c_UART0_IRQHandler\n\r");
+#endif // DEBUG_0
 
+	/* Reading IIR automatically acknowledges the interrupt */
+	IIR_IntId = (pUart->IIR) >> 1 ; // skip pending bit in IIR 
+	if (IIR_IntId & IIR_RDA) { // Receive Data Avaialbe
+		/* read UART. Read RBR will clear the interrupt */
+		g_char_in = pUart->RBR;
+#ifdef DEBUG_0
+		uart1_put_string("Reading a char = ");
+		uart1_put_char(g_char_in);
+		uart1_put_string("\n\r");
+#endif // DEBUG_0
+		msg = (MSGBUF *)k_request_memory_block();
+		msg->mtext[0] = g_char_in;
+		g_buffer[12] = g_char_in; // nasty hack
+		g_send_char = 1;
+		k_send_message(PID_CRT, msg);
+	} else if (IIR_IntId & IIR_THRE) {
+			/* THRE Interrupt, transmit holding register becomes empty */
+		header = dequeue_crt_queue();
+		if (header) {
+			msg = header->msg_env;
+		}
+		if (msg != NULL && msg->mtext[0] != '\0' ) {
+			g_char_out = msg->mtext[0];
+#ifdef DEBUG_0
+			//uart1_put_string("Writing a char = ");
+			//uart1_put_char(g_char_out);
+			//uart1_put_string("\n\r");
+			
+			// you could use the printf instead
+			printf("Writing a char = %c \n\r", g_char_out);
+#endif // DEBUG_0			
+			pUart->THR = g_char_out;
+		} else {
+			pUart->IER ^= IER_THRE; // toggle the IER_THRE bit 
+			pUart->THR = '\0';
+			g_send_char = 0;
+			gp_buffer = g_buffer;		
+		}
+	} else {  /* not implemented yet */
+#ifdef DEBUG_0
+			uart1_put_string("Should not get here!\n\r");
+#endif // DEBUG_0
+		return;
+	}	
+	
 }

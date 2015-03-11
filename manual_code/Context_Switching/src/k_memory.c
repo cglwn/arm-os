@@ -59,9 +59,9 @@ void memory_init(void)
 
 	/* allocate memory for pcb pointers   */
 	gp_pcbs = (PCB **)p_end;
-	p_end += (NUM_TEST_PROCS + 1) * sizeof(PCB *);
+	p_end += (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/) * sizeof(PCB *);
   
-	for ( i = 0; i < (NUM_TEST_PROCS + 1); i++ ) {
+	for ( i = 0; i < (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/); i++ ) {
 		gp_pcbs[i] = (PCB *)p_end;
 		p_end += sizeof(PCB); 
 	}
@@ -125,7 +125,7 @@ U32 *alloc_stack(U32 size_b)
 void *k_request_memory_block(void) {
 	MEM_BLOCK *temp_block = NULL;
 #ifdef DEBUG_0 
-	printf("k_request_memory_block: entering...\n");
+	//printf("k_request_memory_block: entering...\n");
 #endif /* ! DEBUG_0 */
 	enable_interrupts(false);
 	while(!mb_head) {
@@ -146,7 +146,7 @@ int k_release_memory_block(void *p_mem_blk) {
 	MEM_BLOCK *temp_next = mb_head;
 	PCB* blocked_pcb;
 #ifdef DEBUG_0 
-	printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
+	//printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
 #endif /* ! DEBUG_0 */
 	enable_interrupts(false);
 	

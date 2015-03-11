@@ -69,13 +69,13 @@ void set_test_procs() {
 	g_test_procs[2].m_priority   = MEDIUM;
 	
 	g_test_procs[3].mpf_start_pc = &proc4;
-	g_test_procs[3].m_priority   = LOW;
+	g_test_procs[3].m_priority   = LOWEST;
 	
 	g_test_procs[4].mpf_start_pc = &proc5;
-	g_test_procs[4].m_priority   = LOW;
+	g_test_procs[4].m_priority   = LOWEST;
 	
 	g_test_procs[5].mpf_start_pc = &proc6;
-	g_test_procs[5].m_priority   = LOW;
+	g_test_procs[5].m_priority   = LOWEST;
 	uart0_put_string("\n\r\n\r");
 	uart0_put_string("G015_test: START\r\nG015_test: total 6 tests\r\n");
 }
@@ -88,7 +88,7 @@ void proc1(void)
 {
 	MSG_BUF *msg = (MSG_BUF *)receive_message(NULL);
 	if(msg->mtext[0] == 'a'){
-		uart0_put_string("G015_test: Test 1 OK\r\n"); //Test empty blocked queue on release_memory_block
+		uart0_put_string("G015_test: Test 1 OK\r\n"); //Test normal send_message
 	}
 	release_memory_block(msg);
 	set_process_priority(PID_P1, LOWEST);
@@ -110,7 +110,8 @@ void proc2(void)
 	send_message(PID_P1, msg);
 	msg = (MSG_BUF *)request_memory_block();
 	msg->mtext[0] = 'b';
-	delayed_send(PID_P3, msg, 50);
+	send_message(PID_P3, msg);
+	//send_message(PID_P3, msg);
 	while ( 1 ) {
 		release_processor();
 	}
@@ -118,10 +119,11 @@ void proc2(void)
 
 void proc3(void)
 {
-	MSG_BUF *msg = (MSG_BUF *)receive_message(NULL);
+	MSG_BUF *msg = (MSG_BUF *)receive_message((int*)PID_P2);
 	if (msg && msg->mtext[0] == 'b') {
 		uart0_put_string("G015_test: Test 2 OK\r\n");
 	}
+	release_memory_block(msg);
 	while ( 1 ) {
 		release_processor();
 	}
@@ -129,19 +131,12 @@ void proc3(void)
 
 void proc4(void)
 {
-	void *p_mem_blk;
-	p_mem_blk = request_memory_block();
-	uart0_put_string("G015_test: Test 5 OK\r\n"); //Blocked Queue same priority 
-	set_process_priority(PID_P3, HIGH);
-	release_memory_block(p_mem_blk);
 	while ( 1 ) {
 		release_processor();
 	}
 }
 void proc5(void)
 {
-	void *p_mem_blk;
-	p_mem_blk = request_memory_block();
 	while(1) {
 		release_processor();
 	}
@@ -158,3 +153,14 @@ void proc6(void)
 		i++;
 	}
 }
+/*
+void time_proc(void) {
+	MSG_BUF *msg = (MSG_BUF *) request_memory_block();
+	msg->mtext[0] = 'a';
+	delayed_send(PID_CLOCK, msg, 1000);
+	msg = (MSG_BUF *)receive_message(NULL);
+	char *string = (char *) request_memory_block();
+	//send each char to CRT process until null
+	//resend msg to self
+}
+*/

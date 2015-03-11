@@ -23,6 +23,7 @@
 volatile uint32_t g_timer_count = 0; // increment every 1 ms
 extern MSG_HEADER *pending_delayed_messages;
 MSG_HEADER *timeout_queue = NULL;
+uint32_t g_timer_switch_flag = 0;
 /**
  * @brief: initialize timer. Only timer 0 is supported
  */
@@ -112,8 +113,16 @@ __asm void TIMER0_IRQHandler(void)
 {
 	PRESERVE8
 	IMPORT c_TIMER0_IRQHandler
+	IMPORT k_release_processor
 	PUSH{r4-r11, lr}
 	BL c_TIMER0_IRQHandler
+	LDR R4, =__cpp(&g_timer_switch_flag)
+	LDR R4, [R4]
+	MOV R5, #0     
+	CMP R4, R5
+	BEQ  RESTORE    ; if g_timer_switch_flag == 0, then restore the process that was interrupted
+	BL k_release_processor  ; otherwise (i.e g_timer_switch_flag == 1, then switch to the other process)
+RESTORE
 	POP{r4-r11, pc}
 } 
 
@@ -123,12 +132,19 @@ __asm void TIMER0_IRQHandler(void)
 void c_TIMER0_IRQHandler(void)
 {
 	MSG_HEADER *pending_message;
+	LPC_TIM_TypeDef * pTimer = (LPC_TIM_TypeDef *) LPC_TIM0;
 #ifdef DEBUG_0
 	//if (g_timer_count % 10 == 0) {
 		//printf("\nTIMER: %d\n", g_timer_count);
 	//}
 #endif
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
+	LPC_TIM0->IR = BIT(0);  
+	pTimer = (LPC_TIM_TypeDef *) LPC_TIM0;
+	pTimer->MR0 = 1;
+	pTimer->MR1 = 1;
+	pTimer->MR2 = 1;
+	pTimer->MR3 = 1;
 	pending_message = dequeue_pending_queue();
 	while(pending_message != NULL) {
 		//enqueue into prioirity timeout queue
@@ -148,7 +164,6 @@ void c_TIMER0_IRQHandler(void)
 #endif
 		k_send_message(target_pid, msg_env);
 	}
-	LPC_TIM0->IR = BIT(0);  
 	g_timer_count++;
 }
 
