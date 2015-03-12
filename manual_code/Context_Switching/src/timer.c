@@ -142,11 +142,6 @@ void c_TIMER0_IRQHandler(void)
 #endif
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
-	pTimer = (LPC_TIM_TypeDef *) LPC_TIM0;
-	pTimer->MR0 = 1;
-	pTimer->MR1 = 1;
-	pTimer->MR2 = 1;
-	pTimer->MR3 = 1;
 	pending_message = dequeue_pending_queue();
 	while(pending_message != NULL) {
 		//enqueue into prioirity timeout queue
@@ -166,7 +161,7 @@ void c_TIMER0_IRQHandler(void)
 #endif
 		k_send_message_nb(target_pid, msg_env);
 	}
-	g_timer_count++;
+	g_timer_count = (g_timer_count + 1) % 10000;
 	g_timer_switch_flag = higher_priority_available();
 }
 
