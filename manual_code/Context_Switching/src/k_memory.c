@@ -19,6 +19,7 @@ U32 *gp_stack; /* The last allocated stack low address. 8 bytes aligned */
 	       /* stack grows down. Fully decremental stack */
 U32 *start_of_heap;
 MEM_BLOCK *mb_head;
+U32 num_mem_blocks = 0;
 /**
  * @brief: Initialize RAM as follows:
 
@@ -65,9 +66,15 @@ void memory_init(void)
 		gp_pcbs[i] = (PCB *)p_end;
 		p_end += sizeof(PCB); 
 	}
-#ifdef DEBUG_0  
+#ifdef DEBUG_1
 	printf("gp_pcbs[0] = 0x%x \n", gp_pcbs[0]);
 	printf("gp_pcbs[1] = 0x%x \n", gp_pcbs[1]);
+	printf("gp_pcbs[2] = 0x%x \n", gp_pcbs[2]);
+	printf("gp_pcbs[3] = 0x%x \n", gp_pcbs[3]);
+	printf("gp_pcbs[4] = 0x%x \n", gp_pcbs[4]);
+	printf("gp_pcbs[5] = 0x%x \n", gp_pcbs[5]);
+	printf("gp_pcbs[6] = 0x%x \n", gp_pcbs[6]);
+	printf("gp_pcbs[7] = 0x%x \n", gp_pcbs[7]);
 #endif
 	
 	/* prepare for alloc_stack() to allocate memory for stacks */
@@ -86,16 +93,20 @@ void memory_init(void)
 		mb_current = mb_head;
 		initialize_mem_block(mb_current, block_start);
 		while(block_start < gp_stack && (block_start+HEAP_BLOCK_SIZE) < gp_stack && num_blocks < NUM_MEM_BLOCKS) {
-			MEM_BLOCK *pBlock;
+			MEM_BLOCK *p_block;
 			block_start += HEAP_BLOCK_SIZE;
-			pBlock = (MEM_BLOCK *) block_start;
-			initialize_mem_block( pBlock , block_start);
-			mb_current->mb_next = pBlock;
-			mb_current = pBlock;
+			p_block = (MEM_BLOCK *) block_start;
+			initialize_mem_block( p_block , block_start);
+#ifdef DEBUG_0  
+	printf("Mem Block %d: 0x%x\n", ++num_mem_blocks, p_block);
+#endif
+			mb_current->mb_next = p_block;
+			mb_current = p_block;
 			num_blocks++;
 		}
 	}
 #ifdef DEBUG_0  
+	printf("%d blocks of memory created", num_mem_blocks);
 	printf("mb_head = 0x%x \n", mb_head->u_memory);
 #endif
 }
@@ -124,11 +135,11 @@ U32 *alloc_stack(U32 size_b)
 
 void *k_request_memory_block(void) {
 	MEM_BLOCK *temp_block = NULL;
-#ifdef DEBUG_0 
-	//printf("k_request_memory_block: entering...\n");
-#endif /* ! DEBUG_0 */
 	enable_interrupts(false);
 	while(!mb_head) {
+#ifdef DEBUG_0  
+	printf("%d blocked on memory request \n", gp_current_process->m_pid);
+#endif
 		gp_current_process->m_state = BLOCKED;
 		enqueuePriority(PCBBlockedQueue, gp_current_process);
 		enable_interrupts(true);
@@ -138,6 +149,25 @@ void *k_request_memory_block(void) {
 	temp_block = mb_head;
 	mb_head = mb_head->mb_next;
 	enable_interrupts(true);
+#ifdef DEBUG_0
+		printf("P%d allocating 0x%x \n", gp_current_process->m_pid, temp_block->u_memory);
+#endif	//DEBUG_0
+	return temp_block->u_memory;
+}
+
+void *k_request_memory_block_nb(void) {
+	MEM_BLOCK *temp_block = NULL;
+	while(!mb_head) {
+#ifdef DEBUG_0  
+	printf("%d blocked on memory request \n", gp_current_process->m_pid);
+#endif
+		return NULL;
+	}
+	temp_block = mb_head;
+	mb_head = mb_head->mb_next;
+#ifdef DEBUG_0
+		printf("P%d allocating(non-blocking) 0x%d \n", gp_current_process->m_pid, temp_block->u_memory);
+#endif	//DEBUG_0
 	return temp_block->u_memory;
 }
 
@@ -145,9 +175,6 @@ int k_release_memory_block(void *p_mem_blk) {
 	MEM_BLOCK *temp_block;
 	MEM_BLOCK *temp_next = mb_head;
 	PCB* blocked_pcb;
-#ifdef DEBUG_0 
-	//printf("k_release_memory_block: releasing block @ 0x%x\n", p_mem_blk);
-#endif /* ! DEBUG_0 */
 	enable_interrupts(false);
 	
 	//error if memory is not aligned
@@ -159,6 +186,10 @@ int k_release_memory_block(void *p_mem_blk) {
 		enable_interrupts(true);
 		return RTX_ERR;
 	}
+	
+#ifdef DEBUG_0 
+	printf("P%d release x%x\n", gp_current_process->m_pid, p_mem_blk);
+#endif /* ! DEBUG_0 */
 	
 	//put freed memory block back in heap
 	temp_block = p_mem_blk;
@@ -176,6 +207,36 @@ int k_release_memory_block(void *p_mem_blk) {
 	return RTX_OK;
 }
 
+int k_release_memory_block_nb(void *p_mem_blk) {
+	MEM_BLOCK *temp_block;
+	MEM_BLOCK *temp_next = mb_head;
+	PCB* blocked_pcb;
+	
+	//error if memory is not aligned
+	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
+			(U32*)p_mem_blk < gp_stack &&
+			(U32*)p_mem_blk >= start_of_heap) ||
+			is_in_heap((U32*)p_mem_blk)){
+		return RTX_ERR;
+	}
+	#ifdef DEBUG_0 
+	printf("P%d releasing(non-blocking) @ 0x%x\n", gp_current_process->m_pid, p_mem_blk);
+	#endif /* ! DEBUG_0 */
+	
+	//put freed memory block back in heap
+	temp_block = p_mem_blk;
+	initialize_mem_block(temp_block, p_mem_blk);
+	mb_head = temp_block;
+	mb_head->mb_next = temp_next;
+	
+	//put blocked process in ready queue
+	blocked_pcb = dequeuePriority(PCBBlockedQueue);
+	if(blocked_pcb) {
+		blocked_pcb->m_state = RDY;
+		enqueuePriority(PCBReadyQueue, blocked_pcb);
+	}
+	return RTX_OK;
+}
 
 /* ----- Helper Functions ------ */
 
@@ -190,9 +251,6 @@ BOOLEAN is_in_heap(U32* address) {
 	return false;
 }
 void initialize_mem_block(MEM_BLOCK *mb_block, U32* u_memory) {
-#ifdef DEBUG_0  
-	printf("%d\n", u_memory);
-#endif
 	mb_block->mb_next = NULL;
 	mb_block->u_memory = u_memory;
 }

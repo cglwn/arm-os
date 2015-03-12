@@ -233,3 +233,19 @@ PCB* get_process(PCB **pcbs, int pid) {
 	}
 	return NULL;
 }
+
+
+void print_priority_queue(PCB**  pcbQueue) {
+	int i;
+	for (i = 0; i < NUM_PRIORITIES; i++) {
+		print_queue(pcbQueue[i]);
+	}
+}
+
+void print_queue(PCB *pcbQueue) {
+	PCB *current = pcbQueue;
+	while (current != NULL) {
+		//print current
+		current = current->mp_next;
+	}
+}

@@ -111,6 +111,7 @@ uint32_t timer_init(uint8_t n_timer)
  */
 __asm void TIMER0_IRQHandler(void)
 {
+	CPSID I
 	PRESERVE8
 	IMPORT c_TIMER0_IRQHandler
 	IMPORT k_release_processor
@@ -120,6 +121,7 @@ __asm void TIMER0_IRQHandler(void)
 	LDR R4, [R4]
 	MOV R5, #0     
 	CMP R4, R5
+	CPSIE I
 	BEQ  RESTORE    ; if g_timer_switch_flag == 0, then restore the process that was interrupted
 	BL k_release_processor  ; otherwise (i.e g_timer_switch_flag == 1, then switch to the other process)
 RESTORE
@@ -157,13 +159,14 @@ void c_TIMER0_IRQHandler(void)
 		MSG_HEADER *expired_message;
 		expired_message = dequeue_timeout_queue();
 		target_pid = expired_message->dest_pid;
-		msg_env = expired_message->msg_env;
-		k_release_memory_block(expired_message);
+		msg_env = (MSG_BUF*)expired_message->msg_env;
+		k_release_memory_block_nb(expired_message);
 #ifdef DEBUG_0
 	printf("Send Time: %d", g_timer_count);
 #endif
-		k_send_message(target_pid, msg_env);
+		k_send_message_nb(target_pid, msg_env);
 	}
 	g_timer_count++;
+	g_timer_switch_flag = higher_priority_available();
 }
 

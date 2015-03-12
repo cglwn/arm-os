@@ -23,4 +23,6 @@ void enqueue_crt_queue(MSG_HEADER *msg);
 MSG_HEADER* dequeue_pending_queue(void);
 MSG_HEADER* dequeue_crt_queue(void);
 MSG_HEADER* dequeue_timeout_queue(void);
+void print_priority_queue(PCB**  pcbQueue);
+void print_queue(PCB *pcbQueue);
 #endif // K_UTIL_H_

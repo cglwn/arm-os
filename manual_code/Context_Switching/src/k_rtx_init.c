@@ -10,13 +10,14 @@
 #include "k_process.h"
 #include "uart.h"
 #include "timer.h"
+#include "uart_polling.h"
 
-#include "uart.h"
 #include "LPC17xx.h"
 void k_rtx_init(void)
 {
         __disable_irq();
         uart0_irq_init(); 
+				uart1_init();
 				timer_init(0);
         memory_init();
         process_init();
