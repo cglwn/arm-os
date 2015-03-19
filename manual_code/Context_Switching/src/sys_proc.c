@@ -15,9 +15,8 @@ void kcd_proc(void) {
 void crt_proc(void) {
 	while(1) {
 		MSG_BUF *msg;
-		MSG_HEADER* header;
+		MSG_HEADER* header = (MSG_HEADER *) request_memory_block();
 		msg= receive_message(NULL);
-		header = (MSG_HEADER *) request_memory_block();
 		header->msg_env = msg;
 		header->next = NULL;
 		enqueue_crt_queue(header);

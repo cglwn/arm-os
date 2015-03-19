@@ -20,6 +20,7 @@ U32 *gp_stack; /* The last allocated stack low address. 8 bytes aligned */
 U32 *start_of_heap;
 MEM_BLOCK *mb_head;
 U32 num_mem_blocks = 0;
+U32 allocated = 0;
 /**
  * @brief: Initialize RAM as follows:
 
@@ -83,7 +84,13 @@ void memory_init(void)
 	if ((U32)gp_stack & 0x04) { /* 8 bytes alignment */
 		--gp_stack; 
 	}
-  
+	
+  process_init();
+	
+	if ((U32)gp_stack & 0x04) { /* 8 bytes alignment */
+		--gp_stack; 
+	}
+	
 	/* allocate memory for heap, not implemented yet*/
 	start_of_heap = (U32*) p_end;
 	block_start = (U32*) p_end;
@@ -92,9 +99,9 @@ void memory_init(void)
 		mb_head = (MEM_BLOCK *) block_start;
 		mb_current = mb_head;
 		initialize_mem_block(mb_current, block_start);
-		while(block_start < gp_stack && (block_start+HEAP_BLOCK_SIZE) < gp_stack && num_blocks < NUM_MEM_BLOCKS) {
+		while( ((int)block_start+HEAP_BLOCK_SIZE) < (int)gp_stack && num_blocks < NUM_MEM_BLOCKS) {
 			MEM_BLOCK *p_block;
-			block_start += HEAP_BLOCK_SIZE;
+			block_start += HEAP_BLOCK_SIZE/sizeof(U32);
 			p_block = (MEM_BLOCK *) block_start;
 			initialize_mem_block( p_block , block_start);
 #ifdef DEBUG_0  
@@ -137,7 +144,7 @@ void *k_request_memory_block(void) {
 	MEM_BLOCK *temp_block = NULL;
 	enable_interrupts(false);
 	while(!mb_head) {
-#ifdef DEBUG_0  
+#ifdef DEBUG_1
 	printf("%d blocked on memory request \n", gp_current_process->m_pid);
 #endif
 		gp_current_process->m_state = BLOCKED;
@@ -149,8 +156,9 @@ void *k_request_memory_block(void) {
 	temp_block = mb_head;
 	mb_head = mb_head->mb_next;
 	enable_interrupts(true);
-#ifdef DEBUG_0
+#ifdef DEBUG_1
 		printf("P%d allocating 0x%x \n", gp_current_process->m_pid, temp_block->u_memory);
+		allocated++;
 #endif	//DEBUG_0
 	return temp_block->u_memory;
 }
@@ -158,15 +166,16 @@ void *k_request_memory_block(void) {
 void *k_request_memory_block_nb(void) {
 	MEM_BLOCK *temp_block = NULL;
 	while(!mb_head) {
-#ifdef DEBUG_0  
+#ifdef DEBUG_1 
 	printf("%d blocked on memory request \n", gp_current_process->m_pid);
 #endif
 		return NULL;
 	}
 	temp_block = mb_head;
 	mb_head = mb_head->mb_next;
-#ifdef DEBUG_0
-		printf("P%d allocating(non-blocking) 0x%d \n", gp_current_process->m_pid, temp_block->u_memory);
+#ifdef DEBUG_1
+		printf("P%d allocating(non-blocking) 0x%x \n", gp_current_process->m_pid, temp_block->u_memory);
+		allocated++;
 #endif	//DEBUG_0
 	return temp_block->u_memory;
 }
@@ -178,17 +187,23 @@ int k_release_memory_block(void *p_mem_blk) {
 	enable_interrupts(false);
 	
 	//error if memory is not aligned
-	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
-			(U32*)p_mem_blk < gp_stack &&
-			(U32*)p_mem_blk >= start_of_heap) ||
+	if (!(((int)p_mem_blk - (int)start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
+			(int)p_mem_blk < (int)gp_stack &&
+			(int)p_mem_blk >= (int)start_of_heap) ||
 			is_in_heap((U32*)p_mem_blk)){
 				
+				
+#ifdef DEBUG_0
+	printf("P%d (bad free) @ 0x%x\n", gp_current_process->m_pid, p_mem_blk);
+#endif
 		enable_interrupts(true);
 		return RTX_ERR;
+
 	}
 	
 #ifdef DEBUG_0 
-	printf("P%d release x%x\n", gp_current_process->m_pid, p_mem_blk);
+	printf("P%d releasing(non-blocking) @ 0x%x\n", gp_current_process->m_pid, p_mem_blk);
+	allocated--;
 #endif /* ! DEBUG_0 */
 	
 	//put freed memory block back in heap
@@ -217,10 +232,14 @@ int k_release_memory_block_nb(void *p_mem_blk) {
 			(U32*)p_mem_blk < gp_stack &&
 			(U32*)p_mem_blk >= start_of_heap) ||
 			is_in_heap((U32*)p_mem_blk)){
+#ifdef DEBUG_1
+	printf("P%d (bad free non-blocking) @ 0x%x\n", gp_current_process->m_pid, p_mem_blk);
+#endif
 		return RTX_ERR;
 	}
 	#ifdef DEBUG_0 
 	printf("P%d releasing(non-blocking) @ 0x%x\n", gp_current_process->m_pid, p_mem_blk);
+	allocated--;
 	#endif /* ! DEBUG_0 */
 	
 	//put freed memory block back in heap

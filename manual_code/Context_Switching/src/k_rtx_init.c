@@ -11,6 +11,7 @@
 #include "uart.h"
 #include "timer.h"
 #include "uart_polling.h"
+#include "printf.h"
 
 #include "LPC17xx.h"
 void k_rtx_init(void)
@@ -19,8 +20,12 @@ void k_rtx_init(void)
         uart0_irq_init(); 
 				uart1_init();
 				timer_init(0);
+	
+#ifdef DEBUG_0  
+	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+#endif
+	
         memory_init();
-        process_init();
         __enable_irq();
 	
 	/* start the first process */

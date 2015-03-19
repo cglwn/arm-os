@@ -59,9 +59,9 @@ void set_test_procs() {
 		g_test_procs[i].m_pid=(U32)(i+1);
 		g_test_procs[i].m_stack_size=0x100;
 	}
-	//g_test_procs[0].m_pid = (U32) PID_CLOCK;
-  
-	g_test_procs[0].mpf_start_pc = &proc1;
+  g_test_procs[0].m_pid = PID_CLOCK;
+	
+	g_test_procs[0].mpf_start_pc = &clock_proc;
 	g_test_procs[0].m_priority   = HIGH;
 	
 	g_test_procs[1].mpf_start_pc = &proc2;
@@ -74,7 +74,7 @@ void set_test_procs() {
 	g_test_procs[3].m_priority   = LOWEST;
 	
 	g_test_procs[4].mpf_start_pc = &proc5;
-	g_test_procs[4].m_priority   = LOWEST;
+	g_test_procs[4].m_priority   = MEDIUM;
 	
 	g_test_procs[5].mpf_start_pc = &proc6;
 	g_test_procs[5].m_priority   = LOWEST;
@@ -88,22 +88,47 @@ void set_test_procs() {
  */
 void proc1(void)
 {
-	MSG_BUF *msg = (MSG_BUF *)request_memory_block();
-	msg->mtext[0] = 'a';
-	delayed_send(PID_CRT, msg, 1000);
-	
 	/*
-	MSG_BUF *msg = (MSG_BUF *)receive_message(NULL);
+	MSG_BUF *msg;
+	MSG_BUF *msg2;
+	
+	msg = (MSG_BUF *)request_memory_block();
+	msg->mtext[0] = 'a';
+	send_message(PID_P1, msg);
+	msg = (MSG_BUF *) receive_message(NULL);
 	if(msg->mtext[0] == 'a'){
-		uart1_put_string("G015_test: Test 1 OK\r\n"); //Test normal send_message
+		uart1_put_string("G015_test: Test 1 OK\r\n"); //Send message to self
 	}
 	release_memory_block(msg);
-	set_process_priority(PID_P1, LOWEST);
+	msg = receive_message(NULL);
+	msg2 = receive_message(NULL);
+	if (msg->mtext[0] == 'b' && msg2->mtext[0] == 'c') {
+		uart1_put_string("G015_test: Test 2 OK\r\n");//Test message priority and block
+	}
+	release_memory_block(msg);
+	release_memory_block(msg2);
+	msg = request_memory_block();
+	msg->mtext[0] = 'd';
+	msg2 = request_memory_block();
+	msg2->mtext[0] = 'e';
+	delayed_send(PID_P2, msg, 1000);
+	delayed_send(PID_P3, msg2, 9000);
+	msg = receive_message(NULL);
 	
+	if (msg->mtext[0] == 'f') {
+		uart1_put_string("G015_test: Test 6 OK\r\n"); //delayed send test
+	}
+	uart1_put_string("G015_test: Test 6/6 OK\n\r");
+	uart1_put_string("G015_test: Test 0/6 FAIL\n\r");
+	uart1_put_string("G015_test: END\n\r");
+	
+	release_memory_block(msg);
+	set_process_priority(PID_P1, LOWEST);
+	*/
 	while(1) {
 		release_processor();
 	}
-	*/
+	
 }
 
 /**
@@ -112,27 +137,49 @@ void proc1(void)
  */
 void proc2(void)
 {
+	/*
 	MSG_BUF *msg;
 	msg = (MSG_BUF *)request_memory_block();
-	msg->mtext[0] = 'a';
-	send_message(PID_P3, msg);
-	msg = (MSG_BUF *)request_memory_block();
 	msg->mtext[0] = 'b';
-	send_message(PID_P3, msg);
-	//send_message(PID_P3, msg);
+	send_message(PID_P1, msg);
+	msg = (MSG_BUF *)request_memory_block();
+	msg->mtext[0] = 'c';
+	send_message(PID_P1, msg);
+	msg = receive_message(NULL);
+		if(msg->mtext[0] == 'd'){
+		uart1_put_string("G015_test: Test 3 OK\r\n"); //delayed send test
+	}
+	release_memory_block(msg);
+	msg = receive_message(NULL);
+	if (msg->mtext[0] == 'g') {
+		uart1_put_string("G015_test: Test 5 OK\r\n"); //delayed send test
+	}
+	release_memory_block(msg);
+	*/
 	while ( 1 ) {
 		release_processor();
 	}
 }
 
 void proc3(void)
-{
-	MSG_BUF *msg = (MSG_BUF *)receive_message((int*)PID_P2);
-	if (msg && msg->mtext[0] == 'b') {
-		uart1_put_string("G015_test: Test 2 OK\r\n");
+{	
+	/*
+	MSG_BUF *msg;
+	MSG_BUF *msg2;
+	msg = (MSG_BUF *)receive_message(NULL);
+	if(msg->mtext[0] == 'e'){
+		uart1_put_string("G015_test: Test 4 OK\r\n"); //longer delay test
 	}
 	release_memory_block(msg);
-	while ( 1 ) {
+	msg = (MSG_BUF *) request_memory_block();
+	msg->mtext[0] = 'f';
+	msg2 = (MSG_BUF *) request_memory_block();
+	msg2->mtext[0] = 'g';
+	delayed_send(PID_P1, msg, 9000);
+	delayed_send(PID_P2, msg2, 5000);
+	*/
+	
+	while(1) {
 		release_processor();
 	}
 }
@@ -151,34 +198,25 @@ void proc5(void)
 }
 void proc6(void)
 {
-	int i=0;
-	
 	while(1) {
-		if ( i < 2 )  {
-			uart0_put_string("proc6: \n\r");
-		}
 		release_processor();
-		i++;
 	}
 }
 
 void clock_proc(void) {
 	MSG_BUF *msg;
-	char s[1];
+	char s[9];
 	int i;
 	int time = 0;
 	msg = (MSG_BUF *) request_memory_block();
 	while(1) {
-
 		//crt to uart0 to free
 		delayed_send(PID_CLOCK, msg, 1000);
 		msg = receive_message(NULL);
-		//sprintf(s, "\033[s\033[1;69H%02d:%02d:%02d\n\033[u", (time/60/60) % 24, (time/60)%60, (time %60));
-		for (i = 0; i < 8; i++) {
-			sprintf(s, "%d", i);
+		sprintf(s, "%02d:%02d:%02d\n", (time/60/60) % 24, (time/60)%60, (time %60));
+		for (i = 0; i < 5; i++) {
 			msg = (MSG_BUF *) request_memory_block();
-			msg->mtext[0] = s[0];
-			//crt -> uart0 -> free
+			msg->mtext[0] = s[i];
 			send_message(PID_CRT, msg);
 		}
 		time++;

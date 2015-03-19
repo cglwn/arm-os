@@ -211,10 +211,18 @@ void c_UART0_IRQHandler(void)
 			uart1_put_char(g_char_in);
 			uart1_put_string("\n\r");
 #endif // DEBUG_0
+				if (g_char_in == 'q'){
+					print_priority_queue(PCBReadyQueue);
+				}
+				else if (g_char_in == 'w') {
+					print_priority_queue(PCBBlockedQueue);
+				}
+				else {
 				msg->mtext[0] = g_char_in;
 				g_buffer[12] = g_char_in; // nasty hack
 				g_send_char = 1;
 				k_send_message_nb(PID_CRT, msg);
+				}
 		}
 	} else if (IIR_IntId & IIR_THRE) {
 			/* THRE Interrupt, transmit holding register becomes empty */
@@ -239,15 +247,9 @@ void c_UART0_IRQHandler(void)
 		} else {
 			//pUart->IER ^= IER_THRE; // toggle the IER_THRE bit 
 			pUart->THR = '\0';
-			k_release_memory_block_nb(header);
 			//g_send_char = 0;
 			//gp_buffer = g_buffer;		
 		}
-	} else {  /* not implemented yet */
-#ifdef DEBUG_0
-			uart1_put_string("Should not get here!\n\r");
-#endif // DEBUG_0
-		return;
 	}
 	g_switch_flag = higher_priority_available();
 }

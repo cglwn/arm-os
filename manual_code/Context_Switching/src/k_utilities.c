@@ -139,16 +139,20 @@ void enqueue_pending_queue(MSG_HEADER *msg) {
 	if(pending_delayed_messages == NULL) {
 		pending_delayed_messages = msg;
 	} else {
-		while (pending_delayed_messages->next != NULL) {
-			pending_delayed_messages = pending_delayed_messages->next;
+		MSG_HEADER *header = pending_delayed_messages;
+		while (header->next != NULL) {
+			header = header->next;
 		}
-		pending_delayed_messages->next = msg;
+		header->next = msg;
 	}
 }
 
 void enqueue_timeout_queue(MSG_HEADER *msg) {
 	MSG_HEADER *current = timeout_queue;
 	if(timeout_queue == NULL) {
+		timeout_queue = msg;
+	} else if (timeout_queue->next == NULL && msg->expiry < timeout_queue->expiry){
+		msg->next = timeout_queue;
 		timeout_queue = msg;
 	} else {
 		MSG_HEADER *next_msg = timeout_queue->next;
@@ -165,10 +169,11 @@ void enqueue_crt_queue(MSG_HEADER *msg) {
 	if(pending_crt_messages == NULL) {
 		pending_crt_messages = msg;
 	} else {
-		while (pending_crt_messages->next != NULL) {
-			pending_crt_messages = pending_crt_messages->next;
+		MSG_HEADER *header = pending_crt_messages;
+		while (header->next != NULL) {
+			header = header->next;
 		}
-		pending_crt_messages->next = msg;
+		header->next = msg;
 	}
 }
 
@@ -244,8 +249,14 @@ void print_priority_queue(PCB**  pcbQueue) {
 
 void print_queue(PCB *pcbQueue) {
 	PCB *current = pcbQueue;
+	MSG_BUF *msg;
 	while (current != NULL) {
-		//print current
+		msg = (MSG_BUF *)k_request_memory_block_nb();
+		sprintf(msg->mtext, "%1d", current->m_pid);
+		send_message(PID_CRT, msg);
 		current = current->mp_next;
 	}
+	msg = (MSG_BUF *)k_request_memory_block_nb();
+	msg->mtext[0] = '\n';
+	send_message(PID_CRT, msg);
 }

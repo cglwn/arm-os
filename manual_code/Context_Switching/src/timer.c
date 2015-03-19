@@ -134,7 +134,6 @@ RESTORE
 void c_TIMER0_IRQHandler(void)
 {
 	MSG_HEADER *pending_message;
-	LPC_TIM_TypeDef * pTimer = (LPC_TIM_TypeDef *) LPC_TIM0;
 #ifdef DEBUG_0
 	//if (g_timer_count % 10 == 0) {
 		//printf("\nTIMER: %d\n", g_timer_count);
@@ -148,20 +147,23 @@ void c_TIMER0_IRQHandler(void)
 		enqueue_timeout_queue(pending_message);
 		pending_message = dequeue_pending_queue();
 	}
-	while (timeout_queue != NULL && timeout_queue->expiry > g_timer_count) {
+	while (timeout_queue != NULL && g_timer_count > timeout_queue->expiry) {
 		int target_pid;
 		MSG_BUF *msg_env;
 		MSG_HEADER *expired_message;
+#ifdef DEBUG_0 
+	printf("%d expired at %d\n", timeout_queue->expiry, g_timer_count);
+#endif /* ! DEBUG_0 */
 		expired_message = dequeue_timeout_queue();
 		target_pid = expired_message->dest_pid;
 		msg_env = (MSG_BUF*)expired_message->msg_env;
 		k_release_memory_block_nb(expired_message);
-#ifdef DEBUG_0
-	printf("Send Time: %d", g_timer_count);
-#endif
+#ifdef DEBUG_0 
+	printf("TIMER0 release x%x\n", (U32 *) expired_message);
+#endif /* ! DEBUG_0 */
 		k_send_message_nb(target_pid, msg_env);
 	}
-	g_timer_count = (g_timer_count + 1) % 10000;
+	g_timer_count = g_timer_count + 1;
 	g_timer_switch_flag = higher_priority_available();
 }
 

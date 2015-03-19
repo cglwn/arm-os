@@ -75,15 +75,16 @@ void process_init()
 		(gp_pcbs[i])->msg_q = NULL;
 
 		sp = alloc_stack((g_proc_table[i]).m_stack_size);
+#ifdef DEBUG_1
+		printf("User process %d stack pointer is 0x%x.\n", i+1, sp);
+#endif
 		*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 		*(--sp)  = (U32)((g_proc_table[i]).mpf_start_pc); // PC contains the entry point of the process
 		for ( j = 0; j < 6; j++ ) { // R0-R3, R12 are cleared with 0
 			*(--sp) = 0x0;
 		}
 		(gp_pcbs[i])->mp_sp = sp;
-#ifdef DEBUG_0
-		printf("User process %d stack pointer is 0x%d.\n", i+1, sp);
-#endif
+
 		enqueuePriority(PCBReadyQueue, gp_pcbs[i]);
 	}
 	
@@ -95,8 +96,8 @@ void process_init()
 	(gp_pcbs[NUM_TEST_PROCS])->msg_q = NULL;
 	
 	sp = alloc_stack(0x100);
-#ifdef DEBUG_0
-		printf("Null process stack pointer is 0x%d.\n", sp);
+#ifdef DEBUG_1
+		printf("Null process stack pointer is 0x%x.\n", sp);
 #endif
 	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 	*(--sp)  = (U32)(&null_proc); // PC contains the entry point of the process
@@ -114,8 +115,8 @@ void process_init()
 	(gp_pcbs[NUM_TEST_PROCS+1])->msg_q = NULL;
 	
 	sp = alloc_stack(0x100);
-#ifdef DEBUG_0
-		printf("CRT process stack pointer is 0x%d.\n", sp);
+#ifdef DEBUG_1
+		printf("CRT process stack pointer is 0x%x.\n", sp);
 #endif
 	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 	*(--sp)  = (U32)(&crt_proc); // PC contains the entry point of the process
@@ -171,7 +172,7 @@ int process_switch(PCB *p_pcb_old)
 		}
 		gp_current_process->m_state = RUN;
 #ifdef DEBUG_1
-		printf("MSP is being set to 0x%d.\n", gp_current_process->mp_sp);
+		//printf("MSP is being set to 0x%d.\n", gp_current_process->mp_sp);
 #endif
 		__set_MSP((U32) gp_current_process->mp_sp);
 		__rte();  // pop exception stack frame from the stack for a new processes
@@ -190,7 +191,7 @@ int process_switch(PCB *p_pcb_old)
 			}
 			gp_current_process->m_state = RUN;
 #ifdef DEBUG_1
-		printf("MSP is being set to 0x%d.\n", gp_current_process->mp_sp);
+		//printf("MSP is being set to 0x%d.\n", gp_current_process->mp_sp);
 #endif
 			__set_MSP((U32) gp_current_process->mp_sp); //switch to the new proc's stack    
 		} else {
@@ -280,7 +281,7 @@ int k_set_process_priority(int process_id, int priority){
 						enqueuePriority( PCBReadyQueue, gp_pcbs[i] );
 					}
 			}	else {
-#ifdef DEBUG_0
+#ifdef DEBUG_1
 				assert(0);
 #endif /* DEBUG_0 */
 			}
@@ -303,5 +304,5 @@ int k_get_process_priority(int process_id) {
 
 int higher_priority_available(void) {
 	int highestPriority = peekPriority(PCBReadyQueue);
-	return gp_current_process != NULL && highestPriority < gp_current_process->m_priority;
+	return gp_current_process != NULL && highestPriority <= gp_current_process->m_priority;
 }
