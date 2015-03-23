@@ -231,7 +231,7 @@ void enable_interrupts( BOOLEAN n_enable )
 
 PCB* get_process(PCB **pcbs, int pid) { 
 	int i;
-	for( i = 0; i < 8/*NUM_TOTAL_PROCS*/; i++ ) {
+	for( i = 0; i < 10/*NUM_TOTAL_PROCS*/; i++ ) {
 		if(pcbs[i]->m_pid == pid) {
 			return pcbs[i];
 		}
@@ -253,10 +253,10 @@ void print_queue(PCB *pcbQueue) {
 	while (current != NULL) {
 		msg = (MSG_BUF *)k_request_memory_block_nb();
 		sprintf(msg->mtext, "%1d", current->m_pid);
-		send_message(PID_CRT, msg);
+		k_send_message_nb(PID_CRT, msg);
 		current = current->mp_next;
 	}
 	msg = (MSG_BUF *)k_request_memory_block_nb();
 	msg->mtext[0] = '\n';
-	send_message(PID_CRT, msg);
+	k_send_message_nb(PID_CRT, msg);
 }

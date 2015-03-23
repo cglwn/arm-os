@@ -21,6 +21,7 @@
 #include "k_utilities.h"
 #include "message.h"
 #include "sys_proc.h"
+#include "clock.h"
 
 #ifdef DEBUG_0
 #include "printf.h"
@@ -40,8 +41,6 @@ MSG_HEADER *pending_crt_messages = NULL;
 PROC_INIT g_proc_table[NUM_TEST_PROCS];
 extern PROC_INIT g_test_procs[NUM_TEST_PROCS];
 extern volatile uint32_t g_timer_count;
-
-void crt_proc(void);
 
 /**
  * @biref: initialize all processes in the system
@@ -125,6 +124,44 @@ void process_init()
 	}
 	(gp_pcbs[NUM_TEST_PROCS+1])->mp_sp = sp;
 	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+1]);
+	
+	/*Initialize Clock Process*/
+	(gp_pcbs[NUM_TEST_PROCS+2])->m_pid = PID_CLOCK;
+	(gp_pcbs[NUM_TEST_PROCS+2])->m_state = NEW;
+	(gp_pcbs[NUM_TEST_PROCS+2])->m_priority = 0;
+	(gp_pcbs[NUM_TEST_PROCS+2])->mp_next = NULL;
+	(gp_pcbs[NUM_TEST_PROCS+2])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("Clock process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&clock_proc); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[NUM_TEST_PROCS+2])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+2]);
+	
+	/*Initialize KCD Process*/
+	(gp_pcbs[NUM_TEST_PROCS+3])->m_pid = PID_KCD;
+	(gp_pcbs[NUM_TEST_PROCS+3])->m_state = NEW;
+	(gp_pcbs[NUM_TEST_PROCS+3])->m_priority = 0;
+	(gp_pcbs[NUM_TEST_PROCS+3])->mp_next = NULL;
+	(gp_pcbs[NUM_TEST_PROCS+3])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("KCD process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&kcd_proc); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[NUM_TEST_PROCS+3])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+3]);
 }
 
 /*@brief: scheduler, pick the pid of the next to run process
@@ -247,7 +284,7 @@ int k_set_process_priority(int process_id, int priority){
 		return RTX_ERR;
 	}
 	
-	for(i = 0; i < 8 /*NUM_TOTAL_PROCS*/; i++) {
+	for(i = 0; i < 10 /*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			// retCode = 0 for Ready ; 1 for Blocked ; -1 for fail
 			if (isInQueuePriority(PCBReadyQueue, gp_pcbs[i])) {
@@ -294,7 +331,7 @@ int k_set_process_priority(int process_id, int priority){
 
 int k_get_process_priority(int process_id) {
 	int i;
-	for(i = 0; i < 8/*NUM_TOTAL_PROCS*/; i++) {
+	for(i = 0; i < 10/*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			return gp_pcbs[i]->m_priority;
 		}

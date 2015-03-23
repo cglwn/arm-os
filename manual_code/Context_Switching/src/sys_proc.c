@@ -5,12 +5,18 @@
 #include "k_memory.h"
 #include "k_process.h"
 
-/*
+
 void kcd_proc(void) {
-	MSG_BUF *msg = k_receive_message(NULL);
-	
+	while (1) {
+		MSG_BUF *msg;
+		MSG_HEADER* header = (MSG_HEADER *) request_memory_block();
+		msg = receive_message(NULL);
+		header->msg_env = msg;
+		header->next = NULL;
+		enqueue_crt_queue(header);
+	}
 }
-*/
+
 
 void crt_proc(void) {
 	while(1) {

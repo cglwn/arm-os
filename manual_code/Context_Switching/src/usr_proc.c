@@ -59,9 +59,8 @@ void set_test_procs() {
 		g_test_procs[i].m_pid=(U32)(i+1);
 		g_test_procs[i].m_stack_size=0x100;
 	}
-  g_test_procs[0].m_pid = PID_CLOCK;
 	
-	g_test_procs[0].mpf_start_pc = &clock_proc;
+	g_test_procs[0].mpf_start_pc = &proc1;
 	g_test_procs[0].m_priority   = HIGH;
 	
 	g_test_procs[1].mpf_start_pc = &proc2;
@@ -200,25 +199,5 @@ void proc6(void)
 {
 	while(1) {
 		release_processor();
-	}
-}
-
-void clock_proc(void) {
-	MSG_BUF *msg;
-	char s[9];
-	int i;
-	int time = 0;
-	msg = (MSG_BUF *) request_memory_block();
-	while(1) {
-		//crt to uart0 to free
-		delayed_send(PID_CLOCK, msg, 1000);
-		msg = receive_message(NULL);
-		sprintf(s, "%02d:%02d:%02d\n", (time/60/60) % 24, (time/60)%60, (time %60));
-		for (i = 0; i < 5; i++) {
-			msg = (MSG_BUF *) request_memory_block();
-			msg->mtext[0] = s[i];
-			send_message(PID_CRT, msg);
-		}
-		time++;
 	}
 }

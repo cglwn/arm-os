@@ -134,11 +134,6 @@ RESTORE
 void c_TIMER0_IRQHandler(void)
 {
 	MSG_HEADER *pending_message;
-#ifdef DEBUG_0
-	//if (g_timer_count % 10 == 0) {
-		//printf("\nTIMER: %d\n", g_timer_count);
-	//}
-#endif
 	/* ack inttrupt, see section  21.6.1 on pg 493 of LPC17XX_UM */
 	LPC_TIM0->IR = BIT(0);  
 	pending_message = dequeue_pending_queue();

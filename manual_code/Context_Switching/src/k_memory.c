@@ -61,9 +61,9 @@ void memory_init(void)
 
 	/* allocate memory for pcb pointers   */
 	gp_pcbs = (PCB **)p_end;
-	p_end += (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/) * sizeof(PCB *);
-  
-	for ( i = 0; i < (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/); i++ ) {
+	p_end += (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/ + 1 /*clockP*/ + 1/*KCD_PROC*/) * sizeof(PCB *);
+ 
+	for ( i = 0; i < (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/ + 1 /*clockP*/ + 1 /*KCD_PROC*/); i++ ) {
 		gp_pcbs[i] = (PCB *)p_end;
 		p_end += sizeof(PCB); 
 	}
@@ -76,6 +76,8 @@ void memory_init(void)
 	printf("gp_pcbs[5] = 0x%x \n", gp_pcbs[5]);
 	printf("gp_pcbs[6] = 0x%x \n", gp_pcbs[6]);
 	printf("gp_pcbs[7] = 0x%x \n", gp_pcbs[7]);
+	printf("gp_pcbs[8] = 0x%x \n", gp_pcbs[8]);
+	printf("gp_pcbs[9] = 0x%x \n", gp_pcbs[9]);
 #endif
 	
 	/* prepare for alloc_stack() to allocate memory for stacks */
@@ -228,9 +230,9 @@ int k_release_memory_block_nb(void *p_mem_blk) {
 	PCB* blocked_pcb;
 	
 	//error if memory is not aligned
-	if (!(((U32*)p_mem_blk - start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
-			(U32*)p_mem_blk < gp_stack &&
-			(U32*)p_mem_blk >= start_of_heap) ||
+	if (!(((U32)p_mem_blk - (U32)start_of_heap) % HEAP_BLOCK_SIZE == 0 &&
+			(U32)p_mem_blk < (U32)gp_stack &&
+			(U32)p_mem_blk >= (U32)start_of_heap) ||
 			is_in_heap((U32*)p_mem_blk)){
 #ifdef DEBUG_1
 	printf("P%d (bad free non-blocking) @ 0x%x\n", gp_current_process->m_pid, p_mem_blk);
@@ -269,6 +271,7 @@ BOOLEAN is_in_heap(U32* address) {
 	}
 	return false;
 }
+
 void initialize_mem_block(MEM_BLOCK *mb_block, U32* u_memory) {
 	mb_block->mb_next = NULL;
 	mb_block->u_memory = u_memory;

@@ -213,16 +213,21 @@ void c_UART0_IRQHandler(void)
 #endif // DEBUG_0
 				if (g_char_in == 'q'){
 					print_priority_queue(PCBReadyQueue);
-				}
-				else if (g_char_in == 'w') {
+					k_release_memory_block_nb(msg);
+				} else if (g_char_in == 'w') {
 					print_priority_queue(PCBBlockedQueue);
+					k_release_memory_block_nb(msg);
+				} else {
+					msg->mtext[0] = g_char_in;
+					msg->mtype = DEFAULT;
+					g_buffer[12] = g_char_in; // nasty hack
+					g_send_char = 1;
+					k_send_message_nb(PID_KCD, msg);
 				}
-				else {
-				msg->mtext[0] = g_char_in;
-				g_buffer[12] = g_char_in; // nasty hack
-				g_send_char = 1;
-				k_send_message_nb(PID_CRT, msg);
-				}
+		} else {
+#ifdef DEBUG_0
+			uart1_put_string("UART0 could not get memory.");
+#endif // DEBUG_0
 		}
 	} else if (IIR_IntId & IIR_THRE) {
 			/* THRE Interrupt, transmit holding register becomes empty */

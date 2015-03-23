@@ -16,7 +16,10 @@
 #define NULL 0
 #define NUM_TEST_PROCS 6
 
-#define PID_CRT          13
+#define PID_CLOCK				 11
+#define PID_KCD       			 12
+#define PID_CRT         		 13
+
 
 #ifdef DEBUG_0
 #define USR_SZ_STACK 0x200         /* user proc stack size 512B   */

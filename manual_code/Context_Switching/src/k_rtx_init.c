@@ -18,17 +18,13 @@ void k_rtx_init(void)
 {
         __disable_irq();
         uart0_irq_init(); 
-				uart1_init();
-				timer_init(0);
-	
+	uart1_init();
+	timer_init(0);
 #ifdef DEBUG_0  
 	printf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-#endif
-	
+#endif /*DEBUG_0*/
         memory_init();
         __enable_irq();
-	
 	/* start the first process */
-	
         k_release_processor();
 }
