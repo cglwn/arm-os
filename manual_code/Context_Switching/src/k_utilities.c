@@ -260,3 +260,9 @@ void print_queue(PCB *pcbQueue) {
 	msg->mtext[0] = '\n';
 	k_send_message_nb(PID_CRT, msg);
 }
+
+void string_copy(char *destination, char *source, int length) {
+	int i;
+	for (i = 0; i < length; i++)
+	*destination++ = *source++;
+}

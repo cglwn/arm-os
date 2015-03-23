@@ -19,6 +19,7 @@ typedef struct msg_header {
 
 int k_send_message(int process_id, void *message_envelope);
 int k_send_message_nb(int process_id, void *message_envelope);
+int k_send_message_header_nb(int process_id, void *header);
 int k_delayed_send(int process_id, void *message_envelope, int delay);
 void *k_receive_message(int *sender_id);
 void *nb_receive_message(int *sender_id);

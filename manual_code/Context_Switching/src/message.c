@@ -31,7 +31,7 @@ int k_send_message(int process_id, void *message_envelope) {
 	if (dest_pcb->m_state ==  BLOCKED_ON_RECEIVE) {
 		dest_pcb->m_state = RDY;
 		enqueuePriority(PCBReadyQueue, dest_pcb);
-		if (dest_pcb->m_priority < gp_current_process->m_priority) {
+		if (dest_pcb->m_priority <= gp_current_process->m_priority) {
 			enable_interrupts(true);
 			k_release_processor();
 		}
@@ -67,6 +67,22 @@ int k_send_message_nb(int process_id, void *message_envelope) {
 	}
 }
 
+int k_send_message_header_nb(int process_id, void *header) {
+	PCB* dest_pcb;
+	dest_pcb = get_process(gp_pcbs, process_id);
+	//initialize and set header
+	if (header) {
+		enqueue_message_queue(dest_pcb, header);
+		if (dest_pcb->m_state ==  BLOCKED_ON_RECEIVE) {
+			dest_pcb->m_state = RDY;
+			enqueuePriority(PCBReadyQueue, dest_pcb);
+		}
+		return RTX_OK; //TODO: check what this should return
+	} else {
+		return RTX_ERR;
+	}
+}
+
 void *k_receive_message(int *sender_id) {
 	MSG_HEADER *msg_envelope;
 	MSG_BUF *msg;
@@ -79,6 +95,11 @@ void *k_receive_message(int *sender_id) {
 	enable_interrupts(false);
 	msg_envelope = (MSG_HEADER *) dequeue_message_queue(gp_current_process);
 	msg = msg_envelope->msg_env;
+	
+	if (sender_id != NULL) {
+		*sender_id = (int)msg_envelope->source_pid;
+	}
+	
 	k_release_memory_block(msg_envelope);
 	enable_interrupts(true);
 	return msg;
@@ -90,6 +111,9 @@ void *nb_receive_message(int *sender_id) {
 	msg_envelope = dequeue_message_queue(gp_current_process);
 	if (msg_envelope ){ 
 		msg = msg_envelope->msg_env;
+		if (sender_id != NULL) {
+			*sender_id = (int)msg_envelope->source_pid;
+		}
 		k_release_memory_block_nb(msg_envelope);
 	}
 	return msg;

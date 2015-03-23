@@ -87,50 +87,12 @@ void process_init()
 		enqueuePriority(PCBReadyQueue, gp_pcbs[i]);
 	}
 	
-	/*Initialize null process*/
-	(gp_pcbs[NUM_TEST_PROCS])->m_pid = 0;
+	/*Initialize Clock process*/
+	(gp_pcbs[NUM_TEST_PROCS])->m_pid = PID_CLOCK;
 	(gp_pcbs[NUM_TEST_PROCS])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS])->m_priority = NUM_PRIORITIES - 1;
+	(gp_pcbs[NUM_TEST_PROCS])->m_priority = 0;
 	(gp_pcbs[NUM_TEST_PROCS])->mp_next = NULL;
 	(gp_pcbs[NUM_TEST_PROCS])->msg_q = NULL;
-	
-	sp = alloc_stack(0x100);
-#ifdef DEBUG_1
-		printf("Null process stack pointer is 0x%x.\n", sp);
-#endif
-	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
-	*(--sp)  = (U32)(&null_proc); // PC contains the entry point of the process
-	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
-		*(--sp) = 0x0;
-	}
-	(gp_pcbs[NUM_TEST_PROCS])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS]);
-
-	/*Initialize CRT process*/
-	(gp_pcbs[NUM_TEST_PROCS+1])->m_pid = PID_CRT;
-	(gp_pcbs[NUM_TEST_PROCS+1])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS+1])->m_priority = 0;
-	(gp_pcbs[NUM_TEST_PROCS+1])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS+1])->msg_q = NULL;
-	
-	sp = alloc_stack(0x100);
-#ifdef DEBUG_1
-		printf("CRT process stack pointer is 0x%x.\n", sp);
-#endif
-	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
-	*(--sp)  = (U32)(&crt_proc); // PC contains the entry point of the process
-	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
-		*(--sp) = 0x0;
-	}
-	(gp_pcbs[NUM_TEST_PROCS+1])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+1]);
-	
-	/*Initialize Clock Process*/
-	(gp_pcbs[NUM_TEST_PROCS+2])->m_pid = PID_CLOCK;
-	(gp_pcbs[NUM_TEST_PROCS+2])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS+2])->m_priority = 0;
-	(gp_pcbs[NUM_TEST_PROCS+2])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS+2])->msg_q = NULL;
 	
 	sp = alloc_stack(0x100);
 #ifdef DEBUG_1
@@ -141,15 +103,15 @@ void process_init()
 	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
 		*(--sp) = 0x0;
 	}
-	(gp_pcbs[NUM_TEST_PROCS+2])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+2]);
-	
-	/*Initialize KCD Process*/
-	(gp_pcbs[NUM_TEST_PROCS+3])->m_pid = PID_KCD;
-	(gp_pcbs[NUM_TEST_PROCS+3])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS+3])->m_priority = 0;
-	(gp_pcbs[NUM_TEST_PROCS+3])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS+3])->msg_q = NULL;
+	(gp_pcbs[NUM_TEST_PROCS])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS]);
+
+	/*Initialize CRT process*/
+	(gp_pcbs[NUM_TEST_PROCS+1])->m_pid = PID_KCD;
+	(gp_pcbs[NUM_TEST_PROCS+1])->m_state = NEW;
+	(gp_pcbs[NUM_TEST_PROCS+1])->m_priority = 0;
+	(gp_pcbs[NUM_TEST_PROCS+1])->mp_next = NULL;
+	(gp_pcbs[NUM_TEST_PROCS+1])->msg_q = NULL;
 	
 	sp = alloc_stack(0x100);
 #ifdef DEBUG_1
@@ -157,6 +119,44 @@ void process_init()
 #endif
 	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
 	*(--sp)  = (U32)(&kcd_proc); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[NUM_TEST_PROCS+1])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+1]);
+	
+	/*Initialize CRT Process*/
+	(gp_pcbs[NUM_TEST_PROCS+2])->m_pid = PID_CRT;
+	(gp_pcbs[NUM_TEST_PROCS+2])->m_state = NEW;
+	(gp_pcbs[NUM_TEST_PROCS+2])->m_priority = 0;
+	(gp_pcbs[NUM_TEST_PROCS+2])->mp_next = NULL;
+	(gp_pcbs[NUM_TEST_PROCS+2])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("CRT process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&crt_proc); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[NUM_TEST_PROCS+2])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+2]);
+	
+	/*Initialize Clock Process*/
+	(gp_pcbs[NUM_TEST_PROCS+3])->m_pid = 0;
+	(gp_pcbs[NUM_TEST_PROCS+3])->m_state = NEW;
+	(gp_pcbs[NUM_TEST_PROCS+3])->m_priority = NUM_PRIORITIES - 1;
+	(gp_pcbs[NUM_TEST_PROCS+3])->mp_next = NULL;
+	(gp_pcbs[NUM_TEST_PROCS+3])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("Null process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&null_proc); // PC contains the entry point of the process
 	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
 		*(--sp) = 0x0;
 	}

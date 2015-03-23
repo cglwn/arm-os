@@ -144,19 +144,18 @@ void c_TIMER0_IRQHandler(void)
 	}
 	while (timeout_queue != NULL && g_timer_count > timeout_queue->expiry) {
 		int target_pid;
-		MSG_BUF *msg_env;
 		MSG_HEADER *expired_message;
+		MSG_BUF *msg;
 #ifdef DEBUG_0 
 	printf("%d expired at %d\n", timeout_queue->expiry, g_timer_count);
 #endif /* ! DEBUG_0 */
 		expired_message = dequeue_timeout_queue();
 		target_pid = expired_message->dest_pid;
-		msg_env = (MSG_BUF*)expired_message->msg_env;
+		
+		msg = expired_message->msg_env;
 		k_release_memory_block_nb(expired_message);
-#ifdef DEBUG_0 
-	printf("TIMER0 release x%x\n", (U32 *) expired_message);
-#endif /* ! DEBUG_0 */
-		k_send_message_nb(target_pid, msg_env);
+		k_send_message_nb(target_pid, msg);
+		/*k_send_message_header_nb(target_pid, expired_message);*/
 	}
 	g_timer_count = g_timer_count + 1;
 	g_timer_switch_flag = higher_priority_available();
