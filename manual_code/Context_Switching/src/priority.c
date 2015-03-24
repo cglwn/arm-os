@@ -7,7 +7,7 @@
 
 void priority_proc(void) {
 	MSG_BUF *msg;
-	char s[9];
+	char *s = "Error\n";
 	msg = (MSG_BUF *) request_memory_block();
 	msg->mtype = KCD_REG;
 	msg->mtext[0] = 'C';
@@ -17,6 +17,7 @@ void priority_proc(void) {
 		int loopCount = 0;
 		int pid = 0;
 		int i;
+		int ret;
 		int priority = 0;
 		char buffer[8] = "aaaaaaaa";
 		msg = receive_message(NULL);
@@ -52,7 +53,15 @@ void priority_proc(void) {
 			priority += buffer[i] - '0';
 		}
 		
-		set_process_priority(pid, priority);
 		release_memory_block( msg );
+		ret = set_process_priority(pid, priority);
+		if (ret == RTX_ERR) {
+			for (i = 0; i < 6; i++) {
+				msg = (MSG_BUF *)request_memory_block();
+				msg->mtext[0] = s[i];
+				send_message( PID_CRT, msg );
+			}
+		}
+
 	}
 }

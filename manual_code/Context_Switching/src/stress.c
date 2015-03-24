@@ -7,6 +7,7 @@
 #include "stress.h"
 
 // Stress Test Processes
+char *output = "Process C";
 
 void proc_A(void) {
 	int count = 0;
@@ -36,7 +37,7 @@ void proc_A(void) {
 	while( 1 ) {
 		MSG_BUF *msg = (MSG_BUF *) request_memory_block();
 		msg->mtype = COUNT_REPORT;
-		msg->mtext[0] = count;
+		msg->mtext[0] = (count%20);
 		send_message( PID_B, msg );
 		count++;
 		release_processor();
@@ -76,7 +77,6 @@ void proc_C(void) {
 			
 			// DO WE COUNT 0 % 20 == 0 ??
 			if( report_num % 20 == 0 ) {
-				char *output = "Process C";
 				int i = 0;
 				for (i = 0; i < 9 /*strlen(output)*/ ; i++) {
 					// Assumption: first time "msg" is sent it should already have memory

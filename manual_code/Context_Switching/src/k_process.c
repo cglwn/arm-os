@@ -71,13 +71,14 @@ void process_init()
 	/* initilize exception stack frame (i.e. initial context) for each process */
 	for ( i = 0; i < NUM_TEST_PROCS; i++ ) {
 		int j;
-		(gp_pcbs[i])->m_pid = (g_proc_table[i]).m_pid;
-		(gp_pcbs[i])->m_state = NEW;
-		(gp_pcbs[i])->m_priority = (g_proc_table[i]).m_priority;
-		(gp_pcbs[i])->mp_next = NULL;
-		(gp_pcbs[i])->msg_q = NULL;
+		int pid = (g_proc_table[i]).m_pid;
+		(gp_pcbs[pid])->m_pid = (g_proc_table[i]).m_pid;
+		(gp_pcbs[pid])->m_state = NEW;
+		(gp_pcbs[pid])->m_priority = (g_proc_table[i]).m_priority;
+		(gp_pcbs[pid])->mp_next = NULL;
+		(gp_pcbs[pid])->msg_q = NULL;
 
-		sp = alloc_stack((g_proc_table[i]).m_stack_size);
+		sp = alloc_stack((g_proc_table[pid]).m_stack_size);
 #ifdef DEBUG_1
 		printf("User process %d stack pointer is 0x%x.\n", i+1, sp);
 #endif
@@ -86,9 +87,9 @@ void process_init()
 		for ( j = 0; j < 6; j++ ) { // R0-R3, R12 are cleared with 0
 			*(--sp) = 0x0;
 		}
-		(gp_pcbs[i])->mp_sp = sp;
+		(gp_pcbs[pid])->mp_sp = sp;
 
-		enqueuePriority(PCBReadyQueue, gp_pcbs[i]);
+		enqueuePriority(PCBReadyQueue, gp_pcbs[pid]);
 	}
 	
 	/*Initialize Clock process*/
@@ -188,7 +189,7 @@ void process_init()
 	/*Initialize STRESS_A Process*/
 	(gp_pcbs[PID_A])->m_pid = PID_A;
 	(gp_pcbs[PID_A])->m_state = NEW;
-	(gp_pcbs[PID_A])->m_priority = 0;
+	(gp_pcbs[PID_A])->m_priority = 1;
 	(gp_pcbs[PID_A])->mp_next = NULL;
 	(gp_pcbs[PID_A])->msg_q = NULL;
 	

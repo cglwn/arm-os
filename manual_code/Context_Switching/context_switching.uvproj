@@ -348,7 +348,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>DEBUG_0 DEBUG_1</Define>
+              <Define>DEBUG_ DEBUG_</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
@@ -475,6 +475,16 @@
               <FileName>clock.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\clock.c</FilePath>
+            </File>
+            <File>
+              <FileName>priority.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\priority.c</FilePath>
+            </File>
+            <File>
+              <FileName>stress.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\stress.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -61,7 +61,7 @@ void set_test_procs() {
 	}
 	
 	g_test_procs[0].mpf_start_pc = &proc1;
-	g_test_procs[0].m_priority   = LOW;
+	g_test_procs[0].m_priority   = HIGH;
 	
 	g_test_procs[1].mpf_start_pc = &proc2;
 	g_test_procs[1].m_priority   = MEDIUM;
@@ -87,7 +87,6 @@ void set_test_procs() {
  */
 void proc1(void)
 {
-	/*
 	MSG_BUF *msg;
 	MSG_BUF *msg2;
 	
@@ -123,7 +122,6 @@ void proc1(void)
 	
 	release_memory_block(msg);
 	set_process_priority(PID_P1, LOWEST);
-	*/
 	while(1) {
 		release_processor();
 	}
@@ -136,7 +134,6 @@ void proc1(void)
  */
 void proc2(void)
 {
-	/*
 	MSG_BUF *msg;
 	msg = (MSG_BUF *)request_memory_block();
 	msg->mtext[0] = 'b';
@@ -154,7 +151,6 @@ void proc2(void)
 		uart1_put_string("G015_test: Test 5 OK\r\n"); //delayed send test
 	}
 	release_memory_block(msg);
-	*/
 	while ( 1 ) {
 		release_processor();
 	}
@@ -162,7 +158,6 @@ void proc2(void)
 
 void proc3(void)
 {	
-	/*
 	MSG_BUF *msg;
 	MSG_BUF *msg2;
 	msg = (MSG_BUF *)receive_message(NULL);
@@ -176,7 +171,7 @@ void proc3(void)
 	msg2->mtext[0] = 'g';
 	delayed_send(PID_P1, msg, 9000);
 	delayed_send(PID_P2, msg2, 5000);
-	*/
+
 	
 	while(1) {
 		release_processor();
