@@ -1,15 +1,23 @@
+#include "rtx.h"
+//#include "k_utilities.h"
+#include "message.h"
+#include "sys_proc.h"
+//#include "k_memory.h"
+//#include "k_process.h"
+#include "stress.h"
 
 // Stress Test Processes
 
 void proc_A(void) {
-	
 	int count = 0;
+	int* sender_id;
+	MSG_BUF* msg;
 	
 	// This line will need to be released somewhere ?
-	int* sender_id = request_memory_block();
-	
+	sender_id = request_memory_block();
+
 	// NOT SURE IF THIS IS HOW YOU REGISTER:
-	MSG_BUF* msg = (MSG_BUF *) request_memory_block();
+	msg = (MSG_BUF *) request_memory_block();
 	msg->mtype = KCD_REG;
 	msg->mtext[0] = 'Z';
 	send_message(PID_KCD, msg);
@@ -17,7 +25,7 @@ void proc_A(void) {
 	while( 1 ) {
 			MSG_BUF *msg = (MSG_BUF *) receive_message(sender_id);	
 			// NOT SURE IF THIS IS HOW ITS SET UP TO CHECK FOR THE %Z KCD COMMAND
-			if( msg && msg->mtext[0] == 'Z' && msg->mtype == KCD_REG ) {
+			if( msg && *sender_id == PID_KCD ) {
 				release_memory_block( msg );
 				break;
 			} else {
@@ -26,7 +34,7 @@ void proc_A(void) {
 	}
 	
 	while( 1 ) {
-		MSG_BUF* msg = (MSG_BUF)* request_memory_block();
+		MSG_BUF *msg = (MSG_BUF *) request_memory_block();
 		msg->mtype = COUNT_REPORT;
 		msg->mtext[0] = count;
 		send_message( PID_B, msg );
@@ -59,7 +67,7 @@ void proc_C(void) {
 			MSG_HEADER *msgHeader = local_msg_queue;
 			msg = msgHeader->msg_env;
 			local_msg_queue = local_msg_queue->next;
-			release_memory_block_nb( msgHeader ) ;
+			release_memory_block( msgHeader ) ;
 		}
 		
 		
@@ -69,6 +77,7 @@ void proc_C(void) {
 			// DO WE COUNT 0 % 20 == 0 ??
 			if( report_num % 20 == 0 ) {
 				char *output = "Process C";
+				int i = 0;
 				for (i = 0; i < 9 /*strlen(output)*/ ; i++) {
 					// Assumption: first time "msg" is sent it should already have memory
 					// therefore only after the first iteration does it need to request memory
@@ -92,12 +101,12 @@ void proc_C(void) {
 						} else {
 							// Enqueue the msg for later processing
 								if(local_msg_queue == NULL) {
-									local_msg_queue = (MSG_HEADER *)request_memory_block_nb();
+									local_msg_queue = (MSG_HEADER *)request_memory_block();
 									local_msg_queue->msg_env = msg;
 									local_msg_queue->next = NULL;
 								} else {
 									MSG_HEADER *header = local_msg_queue;
-									MSG_HEADER *newHeader = (MSG_HEADER *)request_memory_block_nb();
+									MSG_HEADER *newHeader = (MSG_HEADER *)request_memory_block();
 									while (header->next != NULL) {
 										header = header->next;
 									}

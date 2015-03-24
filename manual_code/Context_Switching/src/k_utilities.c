@@ -231,7 +231,7 @@ void enable_interrupts( BOOLEAN n_enable )
 
 PCB* get_process(PCB **pcbs, int pid) { 
 	int i;
-	for( i = 0; i < 11/*NUM_TOTAL_PROCS*/; i++ ) {
+	for( i = 0; i < 16/*NUM_TOTAL_PROCS*/; i++ ) {
 		if(pcbs[i]->m_pid == pid) {
 			return pcbs[i];
 		}

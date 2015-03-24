@@ -16,10 +16,16 @@
 #define NULL 0
 #define NUM_TEST_PROCS 6
 
-#define PID_SET_PRIO             10
-#define PID_CLOCK				 11
-#define PID_KCD       			 12
-#define PID_CRT         		 13
+#define PID_NULL 0
+#define PID_A    7
+#define PID_B    8
+#define PID_C    9
+#define PID_SET_PRIO     10
+#define PID_CLOCK        11
+#define PID_KCD          12
+#define PID_CRT          13
+#define PID_TIMER_IPROC  14
+#define PID_UART_IPROC   15
 
 
 #ifdef DEBUG_0

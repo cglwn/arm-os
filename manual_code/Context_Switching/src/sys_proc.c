@@ -5,12 +5,12 @@
 #include "k_memory.h"
 #include "k_process.h"
 
+	char command[16]; //increase stack size if this goes up
 
 void kcd_proc(void) {
-	char command[10]; //increase stack size if this goes up
 	int command_length = 0;
-	int registered_procs[2];
-	char proc_commands[2];
+	int registered_procs[3];
+	char proc_commands[3];
 	int num_commands_registered = 0;
 	int *sender_id;
 	
@@ -29,6 +29,8 @@ void kcd_proc(void) {
 			} else if (command_length > 0 && text == '\r') {
 				int i;
 				char command_char = command[1];
+				command[command_length++] = '\0';
+				
 				for (i = 0; i < num_commands_registered; i++) {
 					if (proc_commands[i] == command_char) {
 						msg = request_memory_block();

@@ -23,6 +23,9 @@
 #include "sys_proc.h"
 #include "clock.h"
 #include "priority.h"
+#include "uart_irq.h"
+#include "timer.h"
+#include "stress.h"
 
 #ifdef DEBUG_0
 #include "printf.h"
@@ -89,13 +92,13 @@ void process_init()
 	}
 	
 	/*Initialize Clock process*/
-	(gp_pcbs[NUM_TEST_PROCS])->m_pid = PID_CLOCK;
-	(gp_pcbs[NUM_TEST_PROCS])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS])->m_priority = 0;
-	(gp_pcbs[NUM_TEST_PROCS])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS])->msg_q = NULL;
+	(gp_pcbs[PID_CLOCK])->m_pid = PID_CLOCK;
+	(gp_pcbs[PID_CLOCK])->m_state = NEW;
+	(gp_pcbs[PID_CLOCK])->m_priority = 0;
+	(gp_pcbs[PID_CLOCK])->mp_next = NULL;
+	(gp_pcbs[PID_CLOCK])->msg_q = NULL;
 	
-	sp = alloc_stack(0x100);
+	sp = alloc_stack(0x200);
 #ifdef DEBUG_1
 		printf("Clock process stack pointer is 0x%x.\n", sp);
 #endif
@@ -104,15 +107,15 @@ void process_init()
 	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
 		*(--sp) = 0x0;
 	}
-	(gp_pcbs[NUM_TEST_PROCS])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS]);
+	(gp_pcbs[PID_CLOCK])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_CLOCK]);
 
 	/*Initialize CRT process*/
-	(gp_pcbs[NUM_TEST_PROCS+1])->m_pid = PID_KCD;
-	(gp_pcbs[NUM_TEST_PROCS+1])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS+1])->m_priority = 0;
-	(gp_pcbs[NUM_TEST_PROCS+1])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS+1])->msg_q = NULL;
+	(gp_pcbs[PID_KCD])->m_pid = PID_KCD;
+	(gp_pcbs[PID_KCD])->m_state = NEW;
+	(gp_pcbs[PID_KCD])->m_priority = 0;
+	(gp_pcbs[PID_KCD])->mp_next = NULL;
+	(gp_pcbs[PID_KCD])->msg_q = NULL;
 	sp = alloc_stack(0x200);
 #ifdef DEBUG_1
 		printf("KCD process stack pointer is 0x%x.\n", sp);
@@ -122,17 +125,17 @@ void process_init()
 	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
 		*(--sp) = 0x0;
 	}
-	(gp_pcbs[NUM_TEST_PROCS+1])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+1]);
+	(gp_pcbs[PID_KCD])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_KCD]);
 	
 	/*Initialize CRT Process*/
-	(gp_pcbs[NUM_TEST_PROCS+2])->m_pid = PID_CRT;
-	(gp_pcbs[NUM_TEST_PROCS+2])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS+2])->m_priority = 0;
-	(gp_pcbs[NUM_TEST_PROCS+2])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS+2])->msg_q = NULL;
+	(gp_pcbs[PID_CRT])->m_pid = PID_CRT;
+	(gp_pcbs[PID_CRT])->m_state = NEW;
+	(gp_pcbs[PID_CRT])->m_priority = 0;
+	(gp_pcbs[PID_CRT])->mp_next = NULL;
+	(gp_pcbs[PID_CRT])->msg_q = NULL;
 	
-	sp = alloc_stack(0x100);
+	sp = alloc_stack(0x200);
 #ifdef DEBUG_1
 		printf("CRT process stack pointer is 0x%x.\n", sp);
 #endif
@@ -141,15 +144,15 @@ void process_init()
 	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
 		*(--sp) = 0x0;
 	}
-	(gp_pcbs[NUM_TEST_PROCS+2])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+2]);
+	(gp_pcbs[PID_CRT])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_CRT]);
 	
-	/*Initialize Clock Process*/
-	(gp_pcbs[NUM_TEST_PROCS+3])->m_pid = 0;
-	(gp_pcbs[NUM_TEST_PROCS+3])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS+3])->m_priority = NUM_PRIORITIES - 1;
-	(gp_pcbs[NUM_TEST_PROCS+3])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS+3])->msg_q = NULL;
+	/*Initialize NULL Process*/
+	(gp_pcbs[PID_NULL])->m_pid = 0;
+	(gp_pcbs[PID_NULL])->m_state = NEW;
+	(gp_pcbs[PID_NULL])->m_priority = NUM_PRIORITIES - 1;
+	(gp_pcbs[PID_NULL])->mp_next = NULL;
+	(gp_pcbs[PID_NULL])->msg_q = NULL;
 	
 	sp = alloc_stack(0x100);
 #ifdef DEBUG_1
@@ -160,17 +163,17 @@ void process_init()
 	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
 		*(--sp) = 0x0;
 	}
-	(gp_pcbs[NUM_TEST_PROCS+3])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+3]);
+	(gp_pcbs[PID_NULL])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_NULL]);
 	
 	/*Initialize Priority Process*/
-	(gp_pcbs[NUM_TEST_PROCS+4])->m_pid = PID_SET_PRIO;
-	(gp_pcbs[NUM_TEST_PROCS+4])->m_state = NEW;
-	(gp_pcbs[NUM_TEST_PROCS+4])->m_priority = 0;
-	(gp_pcbs[NUM_TEST_PROCS+4])->mp_next = NULL;
-	(gp_pcbs[NUM_TEST_PROCS+4])->msg_q = NULL;
+	(gp_pcbs[PID_SET_PRIO])->m_pid = PID_SET_PRIO;
+	(gp_pcbs[PID_SET_PRIO])->m_state = NEW;
+	(gp_pcbs[PID_SET_PRIO])->m_priority = 0;
+	(gp_pcbs[PID_SET_PRIO])->mp_next = NULL;
+	(gp_pcbs[PID_SET_PRIO])->msg_q = NULL;
 	
-	sp = alloc_stack(0x100);
+	sp = alloc_stack(0x200);
 #ifdef DEBUG_1
 		printf("Null process stack pointer is 0x%x.\n", sp);
 #endif
@@ -179,8 +182,102 @@ void process_init()
 	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
 		*(--sp) = 0x0;
 	}
-	(gp_pcbs[NUM_TEST_PROCS+4])->mp_sp = sp;
-	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+4]);
+	(gp_pcbs[PID_SET_PRIO])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_SET_PRIO]);
+	
+	/*Initialize STRESS_A Process*/
+	(gp_pcbs[PID_A])->m_pid = PID_A;
+	(gp_pcbs[PID_A])->m_state = NEW;
+	(gp_pcbs[PID_A])->m_priority = 0;
+	(gp_pcbs[PID_A])->mp_next = NULL;
+	(gp_pcbs[PID_A])->msg_q = NULL;
+	
+	sp = alloc_stack(0x200);
+#ifdef DEBUG_1
+		printf("STRESS_A process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&proc_A); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[PID_A])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_A]);
+	
+		/*Initialize STRESS_B Process*/
+	(gp_pcbs[PID_B])->m_pid = PID_B;
+	(gp_pcbs[PID_B])->m_state = NEW;
+	(gp_pcbs[PID_B])->m_priority = 0;
+	(gp_pcbs[PID_B])->mp_next = NULL;
+	(gp_pcbs[PID_B])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("STRESS_B process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&proc_B); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[PID_B])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_B]);
+	
+		/*Initialize STRESS_C Process*/
+	(gp_pcbs[PID_C])->m_pid = PID_C;
+	(gp_pcbs[PID_C])->m_state = NEW;
+	(gp_pcbs[PID_C])->m_priority = 0;
+	(gp_pcbs[PID_C])->mp_next = NULL;
+	(gp_pcbs[PID_C])->msg_q = NULL;
+	
+	sp = alloc_stack(0x200);
+#ifdef DEBUG_1
+		printf("STRESS_C process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&proc_C); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[PID_C])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[PID_C]);
+			
+	/*Initialize TIMER0_IRQHANDLER Process*/
+	(gp_pcbs[PID_TIMER_IPROC])->m_pid = PID_TIMER_IPROC;
+	(gp_pcbs[PID_TIMER_IPROC])->m_state = NEW;
+	(gp_pcbs[PID_TIMER_IPROC])->m_priority = 3;
+	(gp_pcbs[PID_TIMER_IPROC])->mp_next = NULL;
+	(gp_pcbs[PID_TIMER_IPROC])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("STRESS_C process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&c_TIMER0_IRQHandler); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[PID_TIMER_IPROC])->mp_sp = sp;
+	
+	/*Initialize UART0_IRQHANDLER Process*/
+	(gp_pcbs[PID_UART_IPROC])->m_pid = PID_UART_IPROC;
+	(gp_pcbs[PID_UART_IPROC])->m_state = NEW;
+	(gp_pcbs[PID_UART_IPROC])->m_priority = 0;
+	(gp_pcbs[PID_UART_IPROC])->mp_next = NULL;
+	(gp_pcbs[PID_UART_IPROC])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("STRESS_C process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&c_UART0_IRQHandler); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[PID_UART_IPROC])->mp_sp = sp;
+	
 }
 
 /*@brief: scheduler, pick the pid of the next to run process
@@ -299,11 +396,11 @@ int k_set_process_priority(int process_id, int priority){
 	//gp_pcbs
 	int i;
 	int queueCode = -1;
-	if (process_id == 0 || priority == 4){
+	if (process_id == 0 || priority >= 4 || priority < 0){
 		return RTX_ERR;
 	}
 	
-	for(i = 0; i < 11 /*NUM_TOTAL_PROCS*/; i++) {
+	for(i = 0; i < 16 /*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			// retCode = 0 for Ready ; 1 for Blocked ; -1 for fail
 			if (isInQueuePriority(PCBReadyQueue, gp_pcbs[i])) {
@@ -350,7 +447,7 @@ int k_set_process_priority(int process_id, int priority){
 
 int k_get_process_priority(int process_id) {
 	int i;
-	for(i = 0; i < 11/*NUM_TOTAL_PROCS*/; i++) {
+	for(i = 0; i < 16/*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			return gp_pcbs[i]->m_priority;
 		}
