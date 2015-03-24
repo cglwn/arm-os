@@ -22,6 +22,7 @@
 #include "message.h"
 #include "sys_proc.h"
 #include "clock.h"
+#include "priority.h"
 
 #ifdef DEBUG_0
 #include "printf.h"
@@ -112,8 +113,7 @@ void process_init()
 	(gp_pcbs[NUM_TEST_PROCS+1])->m_priority = 0;
 	(gp_pcbs[NUM_TEST_PROCS+1])->mp_next = NULL;
 	(gp_pcbs[NUM_TEST_PROCS+1])->msg_q = NULL;
-	
-	sp = alloc_stack(0x100);
+	sp = alloc_stack(0x200);
 #ifdef DEBUG_1
 		printf("KCD process stack pointer is 0x%x.\n", sp);
 #endif
@@ -162,6 +162,25 @@ void process_init()
 	}
 	(gp_pcbs[NUM_TEST_PROCS+3])->mp_sp = sp;
 	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+3]);
+	
+	/*Initialize Priority Process*/
+	(gp_pcbs[NUM_TEST_PROCS+4])->m_pid = PID_SET_PRIO;
+	(gp_pcbs[NUM_TEST_PROCS+4])->m_state = NEW;
+	(gp_pcbs[NUM_TEST_PROCS+4])->m_priority = 0;
+	(gp_pcbs[NUM_TEST_PROCS+4])->mp_next = NULL;
+	(gp_pcbs[NUM_TEST_PROCS+4])->msg_q = NULL;
+	
+	sp = alloc_stack(0x100);
+#ifdef DEBUG_1
+		printf("Null process stack pointer is 0x%x.\n", sp);
+#endif
+	*(--sp)  = INITIAL_xPSR;      // user process initial xPSR  
+	*(--sp)  = (U32)(&priority_proc); // PC contains the entry point of the process
+	for ( i = 0; i < 6; i++ ) { // R0-R3, R12 are cleared with 0
+		*(--sp) = 0x0;
+	}
+	(gp_pcbs[NUM_TEST_PROCS+4])->mp_sp = sp;
+	enqueuePriority(PCBReadyQueue, gp_pcbs[NUM_TEST_PROCS+4]);
 }
 
 /*@brief: scheduler, pick the pid of the next to run process
@@ -284,7 +303,7 @@ int k_set_process_priority(int process_id, int priority){
 		return RTX_ERR;
 	}
 	
-	for(i = 0; i < 10 /*NUM_TOTAL_PROCS*/; i++) {
+	for(i = 0; i < 11 /*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			// retCode = 0 for Ready ; 1 for Blocked ; -1 for fail
 			if (isInQueuePriority(PCBReadyQueue, gp_pcbs[i])) {
@@ -331,7 +350,7 @@ int k_set_process_priority(int process_id, int priority){
 
 int k_get_process_priority(int process_id) {
 	int i;
-	for(i = 0; i < 10/*NUM_TOTAL_PROCS*/; i++) {
+	for(i = 0; i < 11/*NUM_TOTAL_PROCS*/; i++) {
 		if(gp_pcbs[i]->m_pid == process_id) {
 			return gp_pcbs[i]->m_priority;
 		}

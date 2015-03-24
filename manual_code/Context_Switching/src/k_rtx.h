@@ -16,6 +16,7 @@
 #define NULL 0
 #define NUM_TEST_PROCS 6
 
+#define PID_SET_PRIO             10
 #define PID_CLOCK				 11
 #define PID_KCD       			 12
 #define PID_CRT         		 13

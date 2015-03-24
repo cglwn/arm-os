@@ -61,9 +61,9 @@ void memory_init(void)
 
 	/* allocate memory for pcb pointers   */
 	gp_pcbs = (PCB **)p_end;
-	p_end += (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/ + 1 /*clockP*/ + 1/*KCD_PROC*/) * sizeof(PCB *);
+	p_end += (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/ + 1 /*clockP*/ + 1/*KCD_PROC*/ + 1/*priorityP*/) * sizeof(PCB *);
  
-	for ( i = 0; i < (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/ + 1 /*clockP*/ + 1 /*KCD_PROC*/); i++ ) {
+	for ( i = 0; i < (NUM_TEST_PROCS + 1/*nullP*/ +1 /*crtP*/ + 1 /*clockP*/ + 1 /*KCD_PROC*/ + 1/*priorityP*/); i++ ) {
 		gp_pcbs[i] = (PCB *)p_end;
 		p_end += sizeof(PCB); 
 	}
@@ -260,7 +260,6 @@ int k_release_memory_block_nb(void *p_mem_blk) {
 }
 
 /* ----- Helper Functions ------ */
-
 BOOLEAN is_in_heap(U32* address) { 
 	MEM_BLOCK *temp_block = mb_head;
 	while(temp_block != NULL) { 

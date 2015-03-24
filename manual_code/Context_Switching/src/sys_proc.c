@@ -7,7 +7,7 @@
 
 
 void kcd_proc(void) {
-	char command[10];
+	char command[10]; //increase stack size if this goes up
 	int command_length = 0;
 	int registered_procs[2];
 	char proc_commands[2];
@@ -23,10 +23,10 @@ void kcd_proc(void) {
 			//start of a command
 			if (command_length == 0 && text == '%') {
 				command[command_length++] = text;
-			} else	if (command_length > 0 && text != '\n' && text != '\0') {
+			} else	if (command_length > 0 && text != '\r' && text != '\0') {
 				//append to a command
 				command[command_length++] = text;
-			} else if (command_length > 0 && text == '\n') {
+			} else if (command_length > 0 && text == '\r') {
 				int i;
 				char command_char = command[1];
 				for (i = 0; i < num_commands_registered; i++) {
