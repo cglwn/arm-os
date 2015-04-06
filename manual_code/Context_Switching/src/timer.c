@@ -79,7 +79,7 @@ uint32_t timer_init(uint8_t n_timer)
 	   see MR setting below 
 	*/
 	pTimer1->PR = 12499;  
-	pTimer2->PR = 124; //2*(124 + 1)*(1/25) * 10^(-6) s = 10^(-3) s = 1 µs
+	pTimer2->PR = 24; //2*(24 + 1)*(1/25) * 10^(-6) s = 10^(-3) s = 2 µs
 
 	/* Step 4.2: MR setting, see section 21.6.7 on pg496 of LPC17xx_UM. */
 	pTimer1->MR0 = 1;
