@@ -52,7 +52,7 @@
 
 /* initialization table item */
 PROC_INIT g_test_procs[NUM_TEST_PROCS];
-
+extern uint32_t *timing_analysis;
 void set_test_procs() {
 	int i;
 	for( i = 0; i < NUM_TEST_PROCS; i++ ) {
@@ -87,6 +87,7 @@ void set_test_procs() {
  */
 void proc1(void)
 {
+	/*
 	MSG_BUF *msg;
 	MSG_BUF *msg2;
 	
@@ -122,6 +123,38 @@ void proc1(void)
 	
 	release_memory_block(msg);
 	set_process_priority(PID_P1, LOWEST);
+	*/
+	int i;
+	printf("request_memory_block timing:");
+	for (i = 0; i < 25; i++) {
+		int start = *timing_analysis;
+		int end;
+		MSG_BUF *msg = request_memory_block();
+		end = *timing_analysis;
+		printf("%d\n", end - start);
+		release_memory_block(msg);
+	}
+	printf("send_message timing:");
+	for (i = 0; i < 25; i++) {
+		int start;
+		int end;
+		MSG_BUF *msg = request_memory_block();
+		start = *timing_analysis;
+		send_message(PID_P1, msg);
+		end = *timing_analysis;
+		printf("%d\n", end - start);
+	}
+	printf("receive_message timing:");
+	for (i = 0; i < 25; i++) {
+		int start;
+		int end;
+		MSG_BUF *msg;
+		start = *timing_analysis;
+		msg = receive_message(NULL);
+		end = *timing_analysis;
+		printf("%d\n", end - start);
+		release_memory_block(msg);
+	}
 	while(1) {
 		release_processor();
 	}
@@ -134,6 +167,7 @@ void proc1(void)
  */
 void proc2(void)
 {
+	/*
 	MSG_BUF *msg;
 	msg = (MSG_BUF *)request_memory_block();
 	msg->mtext[0] = 'b';
@@ -151,13 +185,17 @@ void proc2(void)
 		uart1_put_string("G015_test: Test 5 OK\r\n"); //delayed send test
 	}
 	release_memory_block(msg);
+	*/
 	while ( 1 ) {
+		MSG_BUF *msg = request_memory_block();
+		release_memory_block(msg);
 		release_processor();
 	}
 }
 
 void proc3(void)
 {	
+	/*
 	MSG_BUF *msg;
 	MSG_BUF *msg2;
 	msg = (MSG_BUF *)receive_message(NULL);
@@ -172,7 +210,7 @@ void proc3(void)
 	delayed_send(PID_P1, msg, 9000);
 	delayed_send(PID_P2, msg2, 5000);
 
-	
+	*/
 	while(1) {
 		release_processor();
 	}

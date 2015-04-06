@@ -4,14 +4,13 @@
  * @author: Yiqing Huang
  * @date:   2014/01/17
  */
-
+#include <LPC17xx.h>
+#include <system_LPC17xx.h>
 #include "k_memory.h"
 #include "k_process.h"
 #include "k_utilities.h"
-
-#ifdef DEBUG_0
+#include "k_rtx.h"
 #include "printf.h"
-#endif /* ! DEBUG_0 */
 
 /* ----- Global Variables ----- */
 U32 *gp_stack; /* The last allocated stack low address. 8 bytes aligned */
@@ -161,7 +160,7 @@ void *k_request_memory_block(void) {
 #ifdef DEBUG_1
 		printf("P%d allocating 0x%x \n", gp_current_process->m_pid, temp_block->u_memory);
 		allocated++;
-#endif	//DEBUG_0
+#endif	//DEBUG_1
 	return temp_block->u_memory;
 }
 

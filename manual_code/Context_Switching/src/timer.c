@@ -14,13 +14,11 @@
 #include "k_memory.h"
 #include "uart_def.h"
 #include "uart_polling.h"
-
-#ifdef DEBUG_0
 #include "printf.h"
-#endif //DEBUG_0
 
 
 volatile uint32_t g_timer_count = 0; // increment every 1 ms
+volatile uint32_t* timing_analysis;
 extern MSG_HEADER *pending_delayed_messages;
 MSG_HEADER *timeout_queue = NULL;
 uint32_t g_timer_switch_flag = 0;
@@ -29,7 +27,8 @@ uint32_t g_timer_switch_flag = 0;
  */
 uint32_t timer_init(uint8_t n_timer) 
 {
-	LPC_TIM_TypeDef *pTimer;
+	LPC_TIM_TypeDef *pTimer1;
+	LPC_TIM_TypeDef *pTimer2;
 	if (n_timer == 0) {
 		/*
 		Steps 1 & 2: system control configuration.
@@ -61,9 +60,9 @@ uint32_t timer_init(uint8_t n_timer)
 		        See Table 82 on pg110 in LPC17xx_UM 
 		-----------------------------------------------------
 		*/
-		pTimer = (LPC_TIM_TypeDef *) LPC_TIM0;
-
-	} else { /* other timer not supported yet */
+		pTimer1 = (LPC_TIM_TypeDef *) LPC_TIM0;
+		pTimer2 = (LPC_TIM_TypeDef *) LPC_TIM1;
+	} else {
 		return 1;
 	}
 
@@ -79,25 +78,33 @@ uint32_t timer_init(uint8_t n_timer)
 	   TC (Timer Counter) toggles b/w 0 and 1 every 12500 PCLKs
 	   see MR setting below 
 	*/
-	pTimer->PR = 12499;  
+	pTimer1->PR = 12499;  
+	pTimer2->PR = 124; //2*(124 + 1)*(1/25) * 10^(-6) s = 10^(-3) s = 1 µs
 
 	/* Step 4.2: MR setting, see section 21.6.7 on pg496 of LPC17xx_UM. */
-	pTimer->MR0 = 1;
+	pTimer1->MR0 = 1;
+	pTimer2->MR0 = 0;
 
 	/* Step 4.3: MCR setting, see table 429 on pg496 of LPC17xx_UM.
 	   Interrupt on MR0: when MR0 mathches the value in the TC, 
 	                     generate an interrupt.
 	   Reset on MR0: Reset TC if MR0 mathches it.
 	*/
-	pTimer->MCR = BIT(0) | BIT(1);
+	pTimer1->MCR = BIT(0) | BIT(1);
+	pTimer2->MCR = BIT(0) | BIT(1);
 
 	g_timer_count = 0;
 
 	/* Step 4.4: CSMSIS enable timer0 IRQ */
 	NVIC_EnableIRQ(TIMER0_IRQn);
+	NVIC_EnableIRQ(TIMER1_IRQn);
 
 	/* Step 4.5: Enable the TCR. See table 427 on pg494 of LPC17xx_UM. */
-	pTimer->TCR = 1;
+	pTimer1->TCR = 1;
+	pTimer2->TCR = BIT(0);
+	
+	pTimer2->TC = 1;
+	timing_analysis = &pTimer2->TC;
 
 	return 0;
 }
@@ -156,4 +163,3 @@ void c_TIMER0_IRQHandler(void)
 	g_timer_count = g_timer_count + 1;
 	g_timer_switch_flag = higher_priority_available();
 }
-
